@@ -1,0 +1,136 @@
+<template>
+  <div class="home">
+      <div class="search">
+        <header-search></header-search>
+      </div>
+      <div class="BScroll" :style="height" ref="wrapper">
+        <div>
+          <banner-box :data="banner"></banner-box>
+          <nav-box></nav-box>
+          <radio-box></radio-box>
+          <main>
+            <song-list @IdShow="SongShow" :title="'推荐歌单'" :data="songlist"></song-list>
+            <song-list @IdShow="pushSong" :title="'推荐歌区'" :data="RecommendSong"></song-list>
+            <mv-list @IdShow="MvShow" :title="'推荐Mv'" :data="RecommendMv" p="5"></mv-list>
+          </main>
+        </div>
+      </div>
+  </div>
+</template>
+
+<script>
+import HeaderSearch from '../public/HeaderSearch'
+import BannerBox from './BannerBox'
+import NavBox from './NavBox'
+import RadioBox from './RadioBox'
+import SongList from '../public/SongList'
+import MvList from '../public/MvList'
+import BScroll from 'better-scroll'
+export default {
+  name: 'index',
+  components: {
+    HeaderSearch,
+    BannerBox,
+    NavBox,
+    RadioBox,
+    SongList,
+    MvList
+  },
+  data () {
+    return {
+      // Banner图
+      banner: [],
+      // 推荐歌单
+      songlist: [],
+      // 推荐歌曲
+      RecommendSong: [],
+      // 推荐Mv
+      RecommendMv: [],
+      //  better-scroll高度
+      height: ''
+    }
+  },
+  methods: {
+    hei () {
+      let Box = document.getElementsByClassName('BScroll')[0].offsetTop
+      let scrollTop = document.documentElement.clientHeight
+      this.height = 'height:' + (scrollTop - Box) + 'px'
+      console.log(this.height)
+    },
+    // 歌单展示
+    SongShow (data) {
+      this.$router.push('/sonSortMain/' + data.content_id)
+      // console.log(data)
+    },
+    // 添加点击的歌曲
+    pushSong (data) {
+      console.log(data)
+    },
+    MvShow (data) {
+      this.$router.push('/Mv/' + data.vid)
+      // console.log(data.vid)
+    }
+  },
+  mounted () {
+    this.hei()
+    this.$nextTick(() => {
+      this.scroll = new BScroll(this.$refs.wrapper, { // 初始化better-scroll
+        probeType: 1, // 1 滚动的时候会派发scroll事件，会截流。2滚动的时候实时派发scroll事件，不会截流。 3除了实时派发scroll事件，在swipe的情况下仍然能实时派发scroll事件
+        click: true // 是否派发click事件
+      })
+      // 滑动过程中事件
+      this.scroll.on('scroll', (pos) => {
+        if (pos.y > 60) {
+          // this.$store.commit('puadloading', true)
+          console.log('松开刷新')
+        }
+      })
+      // 滑动结束松开事件
+      this.scroll.on('touchEnd', (pos) => { // 上拉刷新
+        if (pos.y > 60) {
+          // this.$store.dispatch('HomeRequest')
+          console.log('已松开')
+        } else {
+          // this.$store.commit('puadloading', false)
+        }
+      })
+    })
+  },
+  created () {
+    let This = this
+    let url = '/qqUMusic' + this.$store.state.url.home
+    this.axios.get(url)
+      .then(function (res) {
+        This.banner = res.data.focus.data.content
+        This.songlist = res.data.recomPlaylist.data.v_hot
+        This.scroll.refresh()
+        // console.log(res.data)
+      })
+    // https://c.y.qq.com
+    let RecommendSong = '/qqCMusic' + this.$store.state.url.homeRecommendSong
+    this.axios.get(RecommendSong)
+      .then(function (res) {
+        This.RecommendSong = res.data.songlist
+        This.scroll.refresh()
+        // console.log(res.data.songlist)
+      })
+    let RecommendMv = '/qqCMusic' + this.$store.state.url.homeGetMv
+    this.axios.get(RecommendMv)
+      .then(function (res) {
+        This.RecommendMv = res.data.data.mvlist
+        This.scroll.refresh()
+        // console.log(res.data.data.mvlist)
+      })
+  }
+}
+</script>
+
+<style scoped>
+  .home{
+    overflow: hidden;
+  }
+  .search{
+    position: relative;
+    z-index: 99;
+  }
+</style>
