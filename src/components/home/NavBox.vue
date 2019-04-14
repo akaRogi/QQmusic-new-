@@ -24,7 +24,7 @@ export default {
         {name: '歌手', icon: 'icon-ai-user', url: '/soner'},
         {name: '排行', icon: 'icon-paihangbang', url: '/rank'},
         {name: '分类歌单', icon: 'icon-fenlei1', url: '/songSort'},
-        {name: '视频', icon: 'icon-shipin', url: '/Mv'}
+        {name: '视频', icon: 'icon-shipin', url: '/MvSort'}
       ]
     }
   }

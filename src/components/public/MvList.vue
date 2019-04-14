@@ -34,6 +34,8 @@ export default {
       let title = null
       if (data.mvtitle) {
         title = data.mvtitle
+      } else if (data.title) {
+        title = data.title
       }
       return title
     },

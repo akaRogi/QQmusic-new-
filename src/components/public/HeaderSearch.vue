@@ -7,9 +7,13 @@
         </li>
       </ul>
     </nav>
-    <div class="search">
+    <router-link
+      tag="div"
+      class="search"
+      to="/search"
+    >
       <!--<Search @searchHid="searchHid" v-if="searchOff"></Search>-->
-    </div>
+    </router-link>
   </header>
 </template>
 

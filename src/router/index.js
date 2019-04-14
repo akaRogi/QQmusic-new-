@@ -2,8 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import demo from '@/components/HelloWorld'
 import home from '@/components/home'
+import search from '@/components/Search'
 import rank from '@/components/rank'
 import songSort from '@/components/songSort'
+import MvSort from '@/components/MvList/index'
 import Mv from '@/components/Mv'
 import ranklist from '@/components/rank/ranklist'
 import sonSortMain from '@/components/home/SongListShow'
@@ -18,6 +20,11 @@ export default new Router({
       component: home
     },
     {
+      path: '/search',
+      name: 'search',
+      component: search
+    },
+    {
       path: '/rank',
       name: 'rank',
       component: rank
@@ -26,6 +33,11 @@ export default new Router({
       path: '/songSort',
       name: 'songSort',
       component: songSort
+    },
+    {
+      path: '/MvSort',
+      name: 'MvSort',
+      component: MvSort
     },
     {
       path: '/Mv/:id?',

@@ -214,25 +214,28 @@ export default {
       return off
     },
     oneSong (data) {
-      let off = true
-      let song = this.$store.state.music
-      console.log(data)
-      for (var i = 0; i < song.length; i++) {
-        if (song[i].mid) {
-          if (song[i].mid === data.mid) {
-            this.$store.commit('musicThisFn', i)
-            off = false
-          }
-        } else if (song[i].strMediaMid) {
-          if (song[i].strMediaMid === data.strMediaMid) {
-            this.$store.commit('musicThisFn', i)
-            off = false
-          }
-        }
-      }
-      if (off) {
-        this.$store.commit('musicPuda', data)
-      }
+      // console.log(data)
+      this.$store.commit('songIndexFn', 1)
+      this.$store.commit('songPush', data)
+      // let off = true
+      // let song = this.$store.state.music
+      // console.log(data)
+      // for (var i = 0; i < song.length; i++) {
+      //   if (song[i].mid) {
+      //     if (song[i].mid === data.mid) {
+      //       this.$store.commit('musicThisFn', i)
+      //       off = false
+      //     }
+      //   } else if (song[i].strMediaMid) {
+      //     if (song[i].strMediaMid === data.strMediaMid) {
+      //       this.$store.commit('musicThisFn', i)
+      //       off = false
+      //     }
+      //   }
+      // }
+      // if (off) {
+      //   this.$store.commit('musicPuda', data)
+      // }
     },
     Collection (data) {
       let off = true
@@ -368,6 +371,7 @@ export default {
     overflow: hidden;
     will-change: transform;
     -webkit-transform: translateZ(0);
+    background: #fff;
   }
   .UlBox{
     height: 790px;
@@ -390,7 +394,7 @@ export default {
     -webkit-border-radius: 20px 20px 0 0;
     -moz-border-radius: 20px 20px 0 0;
     border-radius: 40px 0 0 0;
-    /*background: #232227;*/
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     overflow: hidden;
   }
   .count span{

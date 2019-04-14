@@ -13,23 +13,36 @@ let store = new Vuex.Store({
       // 首页推荐Mv
       homeGetMv: '/mv/fcgi-bin/getmv_by_tag?g_tk=1981813800&loginUin=1737481208&hostUin=0&format=json&inCharset=utf8&outCharset=GB2312&notice=0&platform=yqq.json&needNewCode=0&cmd=shoubo&lan=all',
       // 排行榜
-      rankUrl: '/v8/fcg-bin/fcg_myqq_toplist.fcg?_=1554455002211&g_tk=5381&uin=0&format=json&inCharset=utf-8&outCharset=utf-8&notice=0&platform=h5&needNewCode=1'
+      rankUrl: '/v8/fcg-bin/fcg_myqq_toplist.fcg?_=1554455002211&g_tk=5381&uin=0&format=json&inCharset=utf-8&outCharset=utf-8&notice=0&platform=h5&needNewCode=1',
+      // 搜索热搜
+      hotSearchUrl: '/splcloud/fcgi-bin/gethotkey.fcg?g_tk=1981813800&loginUin=1737481208&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0'
     },
     // 图片的前缀、后缀
     img: {
       sonT: 'https://y.gtimg.cn/music/photo_new/T002R90x90M000',
       sonH: '.jpg?max_age=2592000',
       sonPcT: 'https://y.gtimg.cn/music/photo_new/T002R300x300M000',
+      songShowT: 'https://y.gtimg.cn/music/photo_new/T002R500x500M000',
       DieT: 'https://y.gtimg.cn/music/photo_new/T002R150x150M000',
       userImgT: 'https://y.gtimg.cn/music/photo_new/T001R150x150M000'
     },
-    MvId: ''
+    MvId: '',
+    songList: [],
+    songIndex: 0
   },
   mutations: {
     // 定义的方法，参数一: 行参，填入任何字母都可以。  参数二: 传参。
     // 获取MV的ID值，用于其他组件请求数据
     GetMvId (state, upadte) {
       state.MvId = upadte
+    },
+    songPush (state, data) {
+      state.songList.splice(state.songIndex, 0, data)
+      console.log(state.songList)
+    },
+    songIndexFn (state, data) {
+      state.songIndex = state.songIndex + data
+      console.log(state.songIndex)
     }
   },
   // 类似于计算属性
