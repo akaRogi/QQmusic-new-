@@ -1,10 +1,12 @@
 <template>
   <div class="VideoBox">
-    <video-player  class="video-player vjs-custom-skin"
-                   ref="videoPlayer"
-                   :playsinline="true"
-                   :options="playerOptions"
-    ></video-player>
+    <div class="video">
+      <video-player  class="video-player vjs-custom-skin"
+                     ref="videoPlayer"
+                     :playsinline="true"
+                     :options="playerOptions"
+      ></video-player>
+    </div>
   </div>
 </template>
 
@@ -44,7 +46,8 @@ export default {
     this.axios.get(url)
       .then(function (res) {
         for (var k in res.data.getMVUrl.data) {
-          // console.log(data.getMVUrl.data[k].mp4)
+          This.playerOptions.poster = res.data.getMVInfo.data[k].cover_pic
+          // console.log()
           for (var i = 0; i < res.data.getMVUrl.data[k].mp4.length; i++) {
             // console.log(data.getMVUrl.data[k].mp4[i].freeflow_url)
             if (res.data.getMVUrl.data[k].mp4[i].freeflow_url.length !== 0) {
@@ -61,5 +64,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

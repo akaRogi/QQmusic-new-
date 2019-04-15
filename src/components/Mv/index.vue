@@ -62,10 +62,17 @@ export default {
   },
   methods: {
     Gethei () {
-      let main = document.getElementsByClassName('t1')[this.i].offsetHeight
+      let Box = document.getElementsByClassName('t1')[this.i].offsetTop
+      let scrollTop = document.documentElement.clientHeight
+      console.log(scrollTop - Box)
       this.$nextTick(() => {
-        this.$refs.cateSwiper.xheight = main + 'px'
+        this.$refs.cateSwiper.xheight = scrollTop - Box - 210 + 'px'
       })
+      // let main = document.getElementsByClassName('t1')[this.i].offsetHeight
+      // console.log(main)
+      // this.$nextTick(() => {
+      //   this.$refs.cateSwiper.xheight = main + 'px'
+      // })
     }
   },
   watch: {
@@ -84,5 +91,10 @@ export default {
 </script>
 
 <style scoped>
-
+  .t1{
+    overflow-y: auto;
+  }
+  .Mv >>> .vux-swiper {
+    overflow-y: auto;
+  }
 </style>

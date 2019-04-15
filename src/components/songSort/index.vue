@@ -56,7 +56,7 @@ export default {
     hei () {
       let Box = document.getElementsByClassName('bsaBox')[0].offsetTop
       let scrollTop = document.documentElement.clientHeight
-      this.height = (scrollTop - Box) + 'px'
+      this.height = (scrollTop - Box - 45) + 'px'
       // console.log(this.height)
     },
     XShow (data) {

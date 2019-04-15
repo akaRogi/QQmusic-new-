@@ -75,18 +75,21 @@ export default {
       return str.split('\\n').join('<br>')
     },
     hei () {
-      let Box = document.getElementsByClassName('MvComment')[0]
-      let offsetTop = 0
-      let top = 0
-      while (Box && Box.tagName !== 'BODY') {
-        if (offsetTop.tagName !== 'BODY') {
-          top = Box.offsetTop
+      let This = this
+      setTimeout(() => {
+        let Box = document.getElementsByClassName('MvComment')[0]
+        let offsetTop = 0
+        let top = 0
+        while (Box && Box.tagName !== 'BODY') {
+          if (offsetTop.tagName !== 'BODY') {
+            top = Box.offsetTop
+          }
+          offsetTop += Box.offsetTop
+          Box = Box.offsetParent
         }
-        offsetTop += Box.offsetTop
-        Box = Box.offsetParent
-      }
-      let scrollTop = document.documentElement.clientHeight
-      this.heipx = 'height:' + (scrollTop - top) + 'px'
+        let scrollTop = document.documentElement.clientHeight
+        This.heipx = 'height:' + (scrollTop - top) + 'px'
+      }, 50)
       // console.log(this.heipx)
     }
   },

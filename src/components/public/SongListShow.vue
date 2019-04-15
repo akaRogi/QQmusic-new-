@@ -215,8 +215,8 @@ export default {
     },
     oneSong (data) {
       // console.log(data)
-      this.$store.commit('songIndexFn', 1)
       this.$store.commit('songPush', data)
+      this.$store.commit('songIndexFn', 1)
       // let off = true
       // let song = this.$store.state.music
       // console.log(data)

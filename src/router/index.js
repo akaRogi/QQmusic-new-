@@ -38,7 +38,10 @@ export default new Router({
     {
       path: '/songSort',
       name: 'songSort',
-      component: songSort
+      component: songSort,
+      meta: {
+        keepAlive: true
+      }
     },
     {
       path: '/MvSort',

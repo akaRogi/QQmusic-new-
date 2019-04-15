@@ -1,5 +1,5 @@
 <template>
-  <div class="Box wrap" :style="heipx" ref="wrapper">
+  <div class="Box wrap">
     <ul class="Main">
       <router-link
         tag="li"
@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import BScroll from 'better-scroll'
 export default {
   name: 'MvEcommend',
   props: ['data'],
@@ -48,33 +47,7 @@ export default {
         playNum = playNum + '万'
       }
       return playNum
-    },
-    hei () {
-      let Box = document.getElementsByClassName('wrap')[0]
-      let offsetTop = 0
-      let top = 0
-      while (Box && Box.tagName !== 'BODY') {
-        if (offsetTop.tagName !== 'BODY') {
-          top = Box.offsetTop
-        }
-        offsetTop += Box.offsetTop
-        Box = Box.offsetParent
-      }
-      // console.log(top)
-      let scrollTop = document.documentElement.clientHeight
-      // console.log(Box)
-      this.heipx = 'height:' + (scrollTop - top - 46) + 'px'
-      // console.log(this.heipx)
     }
-  },
-  mounted () {
-    this.hei()
-    this.$nextTick(() => {
-      this.scroll = new BScroll(this.$refs.wrapper, { // 初始化better-scroll
-        probeType: 1, // 1 滚动的时候会派发scroll事件，会截流。2滚动的时候实时派发scroll事件，不会截流。 3除了实时派发scroll事件，在swipe的情况下仍然能实时派发scroll事件
-        click: true // 是否派发click事件
-      })
-    })
   }
 }
 </script>

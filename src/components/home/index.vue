@@ -10,7 +10,7 @@
           <radio-box></radio-box>
           <main>
             <song-list @IdShow="SongShow" :title="'推荐歌单'" :data="songlist"></song-list>
-            <song-list @IdShow="pushSong" :title="'推荐歌区'" :data="RecommendSong"></song-list>
+            <song-list @IdShow="pushSong" :title="'推荐歌曲'" :data="RecommendSong"></song-list>
             <mv-list @IdShow="MvShow" :title="'推荐Mv'" :data="RecommendMv" p="5"></mv-list>
           </main>
         </div>
@@ -64,7 +64,8 @@ export default {
     },
     // 添加点击的歌曲
     pushSong (data) {
-      console.log(data)
+      this.$store.commit('songPush', data.data)
+      this.$store.commit('songIndexFn', 1)
     },
     MvShow (data) {
       this.$router.push('/Mv/' + data.vid)

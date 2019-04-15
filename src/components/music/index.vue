@@ -37,8 +37,9 @@
         <div class="btn" @click="songPuda(-1)">
           <x-icon type="ios-arrow-left" size="30"></x-icon>
         </div>
-        <div class="btn">
-          <x-icon type="ios-ionic-outline" size="30"></x-icon>
+        <div class="btn" @click="songFn">
+          <x-icon type="ios-ionic-outline" size="30" v-show="stopOff"></x-icon>
+          <x-icon type="ios-circle-filled" size="30" v-show="!stopOff"></x-icon>
         </div>
         <div class="btn" @click="songPuda(1)">
           <x-icon type="ios-arrow-right" size="30"></x-icon>
@@ -62,7 +63,8 @@ export default {
       song: {},
       url: '',
       SongLeng: 0,
-      Time: ''
+      Time: '',
+      stopOff: false
     }
   },
   methods: {
@@ -135,6 +137,16 @@ export default {
       //     this.$store.commit('songIndexFn', num)
       //   }
       // }
+    },
+    songFn () {
+      let music = document.getElementById('music')
+      if (music.paused) {
+        this.stopOff = true 
+        music.play()
+      } else {
+        this.stopOff = false
+        music.pause()
+      }
     }
   },
   computed: {
@@ -157,6 +169,7 @@ export default {
       // 播放完毕，下一首
       This.$store.commit('songIndexFn', 1)
       This.jdtData = 100
+      This.stopOff = false
       // if (This.songList[This.$store.state.songIndex - 1]) {
       //   This.song = This.songList[This.$store.state.songIndex - 1]
       //   This.songRequest()
@@ -167,6 +180,7 @@ export default {
     })
     music.addEventListener('canplay', function () {
       This.SongLeng = music.duration
+      This.stopOff = true
       if (This.Time === '') {
         This.Time = setInterval(() => {
           This.jdtData = music.currentTime / music.duration * 100
