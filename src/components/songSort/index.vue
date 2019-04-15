@@ -89,6 +89,10 @@ export default {
 </script>
 
 <style scoped>
+  main{
+    position: relative;
+    z-index: 9999999;
+  }
   .bsaBox{
     overflow: hidden;
   }

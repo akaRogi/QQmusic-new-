@@ -17,7 +17,10 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: home
+      component: home,
+      meta: {
+        keepAlive: true
+      }
     },
     {
       path: '/search',
@@ -27,7 +30,10 @@ export default new Router({
     {
       path: '/rank',
       name: 'rank',
-      component: rank
+      component: rank,
+      meta: {
+        keepAlive: true
+      }
     },
     {
       path: '/songSort',

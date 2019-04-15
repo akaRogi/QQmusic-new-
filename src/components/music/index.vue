@@ -4,8 +4,8 @@
       <div class="ret" @click="$emit('update:musicShow', false)">
         <x-icon type="ios-arrow-left" size="30"></x-icon>
       </div>
-      <div>
-        <h4>{{title(song)}}</h4>
+      <div class="titleBox">
+        <h4 class="one-txt-cut">{{title(song)}}</h4>
       </div>
     </div>
     <div class="bg">
@@ -19,6 +19,7 @@
         <div
           class="jdtBox"
           @touchend="ff"
+          @touchmove="timeStome"
         >
           <range
             decimal
@@ -44,7 +45,7 @@
         </div>
       </div>
     </div>
-    <audio crossOrigin="anonymous" :src="url" autoplay="autoplay" id="music"></audio>
+    <audio :src="url" autoplay="autoplay" id="music"></audio>
   </div>
 </template>
 
@@ -66,8 +67,13 @@ export default {
   },
   methods: {
     ff () {
+      clearInterval(this.Time)
+      this.Time = ''
       var md = document.getElementById('music')
       md.currentTime = this.SongLeng * (this.jdtData / 100)
+    },
+    timeStome () {
+      clearInterval(this.Time)
     },
     title (data) {
       let title
@@ -102,17 +108,33 @@ export default {
         .then(function (res) {
           let id = res.data.data.items[0].filename
           let key = res.data.data.items[0].vkey
+          // 原来可用，但是学校屏蔽了请求
           This.url = T + id + H + key
+          // 虾米代替
+          // This.url = '/kgMusic/175/1175/187012960/1772407981_1512380193769.mp3?ccode=xiami_web_web&expire=86400&duration=254&psid=8e6cdb8520d37742f658508d7f33ae52&ups_client_netip=121.8.148.186&ups_ts=1555289508&ups_userid=0&utid=jEVZFJbxyGACAXkIkcMHu/D5&vid=1772407981&fn=1772407981_1512380193769.mp3&vkey=Bead85b00f2c179eff642c470626591f7'
           console.log(T + id + H + key)
         })
     },
     songPuda (num) {
       // 1下一首，-1上一首
-      if (this.Time === '') {
-        clearInterval(this.Time)
+      if (this.songList.length !== 1) {
+        if (this.songList.length !== this.songThis) {
+          if (this.songThis !== 1) {
+            this.$store.commit('songIndexFn', num)
+          } else if (num === 1) {
+            this.$store.commit('songIndexFn', num)
+          }
+        } else if (num === -1) {
+          this.$store.commit('songIndexFn', num)
+        }
+      } else {
+        alert('没有可播放的歌曲')
       }
-      this.jdtData = 0
-      this.$store.commit('songIndexFn', num)
+      // if (num === -1) {
+      //   if (this.songThis > 1) {
+      //     this.$store.commit('songIndexFn', num)
+      //   }
+      // }
     }
   },
   computed: {
@@ -134,6 +156,7 @@ export default {
       clearInterval(This.Time)
       // 播放完毕，下一首
       This.$store.commit('songIndexFn', 1)
+      This.jdtData = 100
       // if (This.songList[This.$store.state.songIndex - 1]) {
       //   This.song = This.songList[This.$store.state.songIndex - 1]
       //   This.songRequest()
@@ -165,6 +188,11 @@ export default {
       // console.log(2, this.song)
     },
     songThis (to) {
+      this.url = ''
+      this.jdtData = 0
+      if (this.Time === '') {
+        clearInterval(this.Time)
+      }
       if (this.songList[to - 1]) {
         console.log(1, this.songList[to - 1])
         this.song = this.songList[to - 1]
@@ -226,6 +254,10 @@ export default {
   .top .ret{
     position: absolute;
     left: 0;
+  }
+  .titleBox{
+    width: 80%;
+    overflow: hidden;
   }
   .top h4{
     font-size: 40px;
