@@ -5,6 +5,8 @@ Vue.use(Vuex)
 let store = new Vuex.Store({
 // 定义数据
   state: {
+    user: {},
+    userList: [],
     url: {
       // 首页内容
       home: '/cgi-bin/musicu.fcg?-=recom023915247485282398&g_tk=1981813800&loginUin=1737481208&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&data=%7B%22comm%22%3A%7B%22ct%22%3A24%7D%2C%22category%22%3A%7B%22method%22%3A%22get_hot_category%22%2C%22param%22%3A%7B%22qq%22%3A%22%22%7D%2C%22module%22%3A%22music.web_category_svr%22%7D%2C%22recomPlaylist%22%3A%7B%22method%22%3A%22get_hot_recommend%22%2C%22param%22%3A%7B%22async%22%3A1%2C%22cmd%22%3A2%7D%2C%22module%22%3A%22playlist.HotRecommendServer%22%7D%2C%22playlist%22%3A%7B%22method%22%3A%22get_playlist_by_category%22%2C%22param%22%3A%7B%22id%22%3A8%2C%22curPage%22%3A1%2C%22size%22%3A40%2C%22order%22%3A5%2C%22titleid%22%3A8%7D%2C%22module%22%3A%22playlist.PlayListPlazaServer%22%7D%2C%22new_song%22%3A%7B%22module%22%3A%22newsong.NewSongServer%22%2C%22method%22%3A%22get_new_song_info%22%2C%22param%22%3A%7B%22type%22%3A5%7D%7D%2C%22new_album%22%3A%7B%22module%22%3A%22newalbum.NewAlbumServer%22%2C%22method%22%3A%22get_new_album_info%22%2C%22param%22%3A%7B%22area%22%3A1%2C%22sin%22%3A0%2C%22num%22%3A10%7D%7D%2C%22new_album_tag%22%3A%7B%22module%22%3A%22newalbum.NewAlbumServer%22%2C%22method%22%3A%22get_new_album_area%22%2C%22param%22%3A%7B%7D%7D%2C%22toplist%22%3A%7B%22module%22%3A%22musicToplist.ToplistInfoServer%22%2C%22method%22%3A%22GetAll%22%2C%22param%22%3A%7B%7D%7D%2C%22focus%22%3A%7B%22module%22%3A%22QQMusic.MusichallServer%22%2C%22method%22%3A%22GetFocus%22%2C%22param%22%3A%7B%7D%7D%7D',
@@ -43,12 +45,51 @@ let store = new Vuex.Store({
     songIndexFn (state, data) {
       state.songIndex = state.songIndex + data
       console.log(state.songIndex)
+    },
+    userFn (state, data) {
+      state.user = data
+      console.log(state.user)
+    },
+    userListFn (state, data) {
+      state.userList = data
+      this.commit('userFn', this.getters.userListLogin)
+    },
+    userListPush (state, data) {
+      // 新用户注册
+      //  1、把所有之前注册的账户退出
+      state.userList.forEach(el => {
+        el.login = false
+      })
+      // 2、由于数据引入的是同一个地址以及内存的值，vue会劫持相关数据
+      // 导致如果一个列表里都是相同的内存以及地址的数据
+      // 这个列表的所有数据，都会变成，最新push进来的数据
+
+      // 原理
+      // vue会劫持相关数据，如果是同一个地址就会添加同样的双向绑定
+      // 给劫持的数据数据都加上getter和setter，也就是双向绑定
+      // 所以导致 一旦有同内存的值push进来，列表相同的也会跟随着push进来的值改变
+
+      // 解决
+      // 用Object.assign进行拷贝，但是这份拷贝的，是没有去掉 双向绑定的
+      // 然后拷贝完之后,把这份拷贝出来的进行json转换成字符串，这步可以去掉双休绑定
+      // 转换完毕之后，再将这份字符串转换成json
+      // 然后push
+      state.userList.push(Object.assign({}, JSON.parse(JSON.stringify(data))))
+      this.commit('userFn', this.getters.userListLogin)
+      localStorage.setItem('QQmusicUser', JSON.stringify(state.userList))
+      // console.log(state.userList)
     }
   },
   // 类似于计算属性
   getters: {
-    totals (state) {
-      return state.p
+    userListLogin (state) {
+      let user
+      state.userList.forEach(el => {
+        if (el.login) {
+          user = el
+        }
+      })
+      return user || {}
     }
   },
   // 异步操作，数据请求和定时器必须放在这里执行

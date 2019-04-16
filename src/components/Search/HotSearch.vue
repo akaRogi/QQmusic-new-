@@ -40,7 +40,12 @@ export default {
 
 <style scoped>
   .search_hot{
+    position: absolute;
     padding: 30px;
+    top: 120px;
+    height: calc(100% - 180px);
+    background: #fff;
+    z-index: 899999;
   }
   .search_hot h3{
     margin-bottom: 20px;

@@ -4,6 +4,7 @@
       <router-view v-if="$route.meta.keepAlive"/>
     </keep-alive>
     <router-view v-if="!$route.meta.keepAlive"/>
+    <router-view name="user"/>
     <div class="musicDiv" @click="musicShow = true">
       音乐
     </div>
@@ -31,11 +32,18 @@ export default {
       musicShow: false
     }
   },
+  computed: {
+    userFn () {
+      return this.$store.state.user
+    }
+  },
   created () {
-    // let This = this
-    setInterval(() => {
-      // console.log(This.$store.state.songList)
-    }, 1000)
+    let user = JSON.parse(localStorage.getItem('QQmusicUser')) || []
+    this.$store.commit('userListFn', user)
+  },
+  watch: {
+    userFn (to) {
+    }
   }
 }
 </script>

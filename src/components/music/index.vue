@@ -113,7 +113,7 @@ export default {
           // 原来可用，但是学校屏蔽了请求
           This.url = T + id + H + key
           // 虾米代替
-          // This.url = '/kgMusic/175/1175/187012960/1772407981_1512380193769.mp3?ccode=xiami_web_web&expire=86400&duration=254&psid=8e6cdb8520d37742f658508d7f33ae52&ups_client_netip=121.8.148.186&ups_ts=1555289508&ups_userid=0&utid=jEVZFJbxyGACAXkIkcMHu/D5&vid=1772407981&fn=1772407981_1512380193769.mp3&vkey=Bead85b00f2c179eff642c470626591f7'
+          // This.url = 'http://win.web.nf03.sycdn.kuwo.cn/54a67054929715cfcf3d1c788856a260/5cb56f19/resource/a3/12/12/1856993921.aac'
           console.log(T + id + H + key)
         })
     },
@@ -141,7 +141,7 @@ export default {
     songFn () {
       let music = document.getElementById('music')
       if (music.paused) {
-        this.stopOff = true 
+        this.stopOff = true
         music.play()
       } else {
         this.stopOff = false

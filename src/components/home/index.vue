@@ -134,4 +134,7 @@ export default {
     position: relative;
     z-index: 99;
   }
+  .home >>> .vux-popup-mask{
+     background: rgba(0, 0, 0, .2);
+   }
 </style>
