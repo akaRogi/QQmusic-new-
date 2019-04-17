@@ -14,7 +14,15 @@
           {{item.name}}
         </tab-item>
       </tab>
-      <swiper v-model="i" :height="height" :show-dots="false" class="bsaBox" :threshold="XZshow" :min-moving-distance="Xz">
+      <swiper
+        v-model="i"
+        :show-dots="false"
+        :threshold="XZshow"
+        :min-moving-distance="Xz"
+        class="bsaBox"
+        ref="cateSwiper"
+        @on-get-height="hei"
+      >
         <swiper-item v-for="(item, index) in list" :key="index" :min-moving-distance="Xz">
           <div class="tab-swiper vux-center">
             <!--<div class="Box" :style="'height:' + height">-->
@@ -56,7 +64,17 @@ export default {
     hei () {
       let Box = document.getElementsByClassName('bsaBox')[0].offsetTop
       let scrollTop = document.documentElement.clientHeight
-      this.height = (scrollTop - Box) + 'px'
+      console.log(scrollTop - Box)
+      this.$nextTick(() => {
+        this.$refs.cateSwiper.xheight = scrollTop - Box + 'px'
+      })
+
+      // let Box = document.getElementsByClassName('bsaBoxx')[0].offsetTop
+      // console.log(Box)
+      // let scrollTop = document.documentElement.clientHeight
+      // console.log(scrollTop)
+      // console.log(scrollTop - Box)
+      // this.height = scrollTop - Box + 'px'
       // console.log(this.height)
     },
     XShow (data) {
@@ -85,9 +103,6 @@ export default {
         // console.log(res.data.data.categories[4])
       })
   },
-  mounted () {
-    this.hei()
-  },
   watch: {
     i () {
       this.id = this.list[this.i].id
@@ -97,7 +112,7 @@ export default {
 </script>
 
 <style scoped>
-  .bsaBox{
+  .bsaBoxx{
     overflow: hidden;
   }
   .songSort >>> .vux-tab{

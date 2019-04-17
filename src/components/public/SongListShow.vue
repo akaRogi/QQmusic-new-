@@ -39,6 +39,9 @@
             @click="oneSong(item)"
           >
             <div class="SongShowBox">
+              <div class="icon" @click.stop="shoucanShow(item)">
+                <x-icon type="ios-heart-outline" size="30" class="vux-x-icon"></x-icon>
+              </div>
               <div class="Num">
                 <span>{{index + 1}}</span>
               </div>
@@ -62,7 +65,14 @@ export default {
   name: 'sonList',
   props: ['data'],
   data () {
-    return {heipx: ''}
+    return {
+      heipx: '',
+      timeOutEvent: 0,
+      show2: false,
+      showContent002: false,
+      titleTxt: '',
+      song: {}
+    }
   },
   methods: {
     th (data) {
@@ -173,8 +183,8 @@ export default {
       } else if (data.musicData) {
         title.title = data.musicData.songname
         title.songer = data.musicData.singer
-      } else if (data.albumname) {
-        title.title = data.albumname
+      } else if (data.songname) {
+        title.title = data.songname
         title.songer = data.singer
       }
       return title
@@ -217,25 +227,11 @@ export default {
       // console.log(data)
       this.$store.commit('songPush', data)
       this.$store.commit('songIndexFn', 1)
-      // let off = true
-      // let song = this.$store.state.music
-      // console.log(data)
-      // for (var i = 0; i < song.length; i++) {
-      //   if (song[i].mid) {
-      //     if (song[i].mid === data.mid) {
-      //       this.$store.commit('musicThisFn', i)
-      //       off = false
-      //     }
-      //   } else if (song[i].strMediaMid) {
-      //     if (song[i].strMediaMid === data.strMediaMid) {
-      //       this.$store.commit('musicThisFn', i)
-      //       off = false
-      //     }
-      //   }
-      // }
-      // if (off) {
-      //   this.$store.commit('musicPuda', data)
-      // }
+    },
+    shoucanShow (data) {
+      this.$store.state.loveOff = true
+      this.$store.state.song = data
+      // this.song = data
     },
     Collection (data) {
       let off = true
@@ -271,6 +267,9 @@ export default {
   }
   .main li.is_show .li_list span{
     color: #31c27c;
+  }
+  li{
+    position: relative;
   }
   li.show{
     color: #31c27c;
@@ -473,4 +472,13 @@ export default {
   .use span{
     float: left;
   }
+  .icon {
+    position: absolute;
+    right: 10px;
+    top: calc(50% - 30px);
+  }
+  .vux-x-icon {
+    fill: #31c27c;
+  }
+  /*vux-tap-active weui-cell_access vux-cell-no-border-intent*/
 </style>

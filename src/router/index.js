@@ -12,10 +12,12 @@ import ranklist from '@/components/rank/ranklist'
 import sonSortMain from '@/components/home/SongListShow'
 import registered from '@/components/user/registered'
 import login from '@/components/user/login'
+import UserSong from '@/components/user/SongList'
+import SongListPush from '@/components/user/SongListPush'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -83,6 +85,27 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: login
+    },
+    {
+      path: '/UserSong',
+      name: 'UserSong',
+      component: UserSong
+    },
+    {
+      path: '/SongListPush',
+      name: 'SongListPush',
+      component: SongListPush
     }
   ]
+})
+export default router
+router.beforeEach((to, from, next) => {
+  if (to.name === 'registered' || to.name === 'login') {
+    if (!JSON.parse(localStorage.getItem('QQUserLogin')) || JSON.parse(localStorage.getItem('QQUserLogin')) === {}) {
+      console.log(JSON.parse(localStorage.getItem('QQUserLogin')))
+      next()
+    }
+  } else {
+    next()
+  }
 })

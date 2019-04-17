@@ -40,6 +40,7 @@ export default {
   methods: {
     registeredFn () {
       this.$store.commit('userListPush', this.user)
+      this.$router.replace('/')
     }
   }
 }

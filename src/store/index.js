@@ -30,7 +30,11 @@ let store = new Vuex.Store({
     },
     MvId: '',
     songList: [],
-    songIndex: 0
+    songIndex: 0,
+    tis: false,
+    loveOff: false,
+    song: {},
+    songtj: true
   },
   mutations: {
     // 定义的方法，参数一: 行参，填入任何字母都可以。  参数二: 传参。
@@ -40,19 +44,22 @@ let store = new Vuex.Store({
     },
     songPush (state, data) {
       state.songList.splice(state.songIndex, 0, data)
-      console.log(state.songList)
+      // console.log(state.songList)
     },
     songIndexFn (state, data) {
       state.songIndex = state.songIndex + data
-      console.log(state.songIndex)
+      // console.log(state.songIndex)
     },
     userFn (state, data) {
       state.user = data
-      console.log(state.user)
+      console.log(data)
+      // console.log(state.user)
     },
     userListFn (state, data) {
       state.userList = data
+      // console.log(state.userList)
       this.commit('userFn', this.getters.userListLogin)
+      localStorage.setItem('QQmusicUser', JSON.stringify(state.userList))
     },
     userListPush (state, data) {
       // 新用户注册
@@ -78,6 +85,31 @@ let store = new Vuex.Store({
       this.commit('userFn', this.getters.userListLogin)
       localStorage.setItem('QQmusicUser', JSON.stringify(state.userList))
       // console.log(state.userList)
+    },
+    userOut (state) {
+      // 用户退出，将列表所有的用户退出
+      state.userList.forEach(el => {
+        el.login = false
+      })
+      // 刷新当前登录的状态
+      this.commit('userFn', this.getters.userListLogin)
+      // 保存当前账户列表
+      localStorage.setItem('QQmusicUser', JSON.stringify(state.userList))
+      // 退出当前保存的账号
+      localStorage.removeItem('QQUserLogin')
+      // localStorage.setItem('QQUserLogin', JSON.stringify())
+    },
+    userSongPudate (state, data) {
+      state.userList.forEach(el => {
+        if (el.Account === data.Account) {
+          el = data
+          this.commit('userFn', el)
+          localStorage.setItem('QQmusicUser', JSON.stringify(state.userList))
+        }
+      })
+    },
+    tisFn (state, data) {
+      state.tis = data
     }
   },
   // 类似于计算属性
@@ -87,9 +119,28 @@ let store = new Vuex.Store({
       state.userList.forEach(el => {
         if (el.login) {
           user = el
+          localStorage.setItem('QQUserLogin', JSON.stringify(el))
         }
       })
       return user || {}
+    },
+    songTitle (state) {
+      let Title
+      console.log(1, state.song)
+      if (state.song.data) {
+        if (state.song.data.songname) {
+          Title = state.song.data.songname
+        }
+      } else if (state.song.name) {
+        if (state.song.singer) {
+          Title = state.song.name
+        }
+      } else if (state.song.musicData) {
+        Title = state.song.musicData.songname
+      } else if (state.song.songname) {
+        Title = state.song.songname
+      }
+      return Title
     }
   },
   // 异步操作，数据请求和定时器必须放在这里执行

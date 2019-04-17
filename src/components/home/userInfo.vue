@@ -1,7 +1,9 @@
 <template>
   <div class="userInfo">
     <div class="icon">
-      <i class="iconfont icon-gengduo-2" @click="value = true"></i>
+      <div class="iconBox">
+        <i class="iconfont icon-gengduo-2" @click="value = true"></i>
+      </div>
       <popup
         v-model="value"
         position="left"
@@ -28,30 +30,55 @@
             </div>
           </div>
           <div class="userSongList">
-            <div class="title vux-1px-b">
-              <cell
-                :title="'我的歌单'"
-                is-link
-                :border-intent="false"
-                :arrow-direction="showContent004 ? 'up' : 'down'"
-                @click.native="showContent004 = !showContent004"
-              ></cell>
-            </div>
-            <div class="title vux-1px-b">
-              <cell
-                :title="'我的歌单'"
-                is-link
-                :border-intent="false"
-                :arrow-direction="showContent004 ? 'up' : 'down'"
-                @click.native="showContent004 = !showContent004"
-              ></cell>
-            </div>
+            <group>
+              <div class="title vux-1px-b">
+                <cell
+                  :title="'我的歌单'"
+                  is-link
+                  :border-intent="false"
+                  :arrow-direction="showContent001 ? 'up' : 'down'"
+                  @click.native="showContent001 = !showContent001"
+                ></cell>
+                <div class="slide" :class="showContent001?'animate':''">
+                  <cell
+                    v-if="user.Account"
+                    title="新建歌单"
+                    link="/SongListPush"
+                    is-link
+                  ></cell>
+                  <cell
+                    v-for="(item, index) in user.songList"
+                    :key="index"
+                    :title="item.title"
+                    :value="user.Account"
+                    is-link
+                  ></cell>
+                </div>
+              </div>
+              <div class="title vux-1px-b">
+                <cell
+                  :title="'我的歌单'"
+                  is-link
+                  :border-intent="false"
+                  :arrow-direction="showContent002 ? 'up' : 'down'"
+                  @click.native="showContent002 = !showContent002"
+                ></cell>
+                <div class="slide" :class="showContent002?'animate':''">
+                  <cell
+                    v-for="(item, index) in user.Collection"
+                  :key="index"
+                  :title="item.title"
+                  :value="user.Account"
+                  is-link></cell>
+                </div>
+              </div>
+            </group>
           </div>
           <div class="btn">
             <div>
               <x-button>切换用户</x-button>
             </div>
-            <div>
+            <div @click="usetOut">
               <x-button>退出当前账户</x-button>
             </div>
           </div>
@@ -62,10 +89,11 @@
 </template>
 
 <script>
-import { Popup, Cell, XButton } from 'vux'
+import { Group, Popup, Cell, XButton } from 'vux'
 export default {
   name: 'userInfo',
   components: {
+    Group,
     Popup,
     Cell,
     XButton
@@ -73,7 +101,13 @@ export default {
   data () {
     return {
       value: false,
-      showContent004: false
+      showContent001: false,
+      showContent002: false
+    }
+  },
+  methods: {
+    usetOut () {
+      this.$store.commit('userOut')
     }
   },
   computed: {
@@ -157,5 +191,36 @@ export default {
   .btn div:nth-child(2) >>> button:after{
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
+  }
+  .SongList{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 99999999999;
+    background: #fff;
+  }
+  .sub-item {
+    color: #888;
+  }
+  .slide {
+    padding: 0 20px;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height .5s cubic-bezier(0, 1, 0, 1) -.1s;
+  }
+  .animate {
+    max-height: 9999px;
+    transition-timing-function: cubic-bezier(0.5, 0, 1, 0);
+    transition-delay: 0s;
+  }
+  .slide li{
+    padding-left: 25px;
+    margin-bottom: 10px;
+  }
+  .slide{
+    padding: 0;
+  }
+  .slide >>> .weui-cell{
+    padding-left: 35px;
   }
 </style>

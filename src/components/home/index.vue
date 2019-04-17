@@ -7,7 +7,7 @@
         <div>
           <banner-box :data="banner"></banner-box>
           <nav-box></nav-box>
-          <radio-box></radio-box>
+          <radio-box :data="newSong"></radio-box>
           <main>
             <song-list @IdShow="SongShow" :title="'推荐歌单'" :data="songlist"></song-list>
             <song-list @IdShow="pushSong" :title="'推荐歌曲'" :data="RecommendSong"></song-list>
@@ -47,7 +47,9 @@ export default {
       // 推荐Mv
       RecommendMv: [],
       //  better-scroll高度
-      height: ''
+      height: '',
+      // 新歌
+      newSong: [{album: {}}]
     }
   },
   methods: {
@@ -104,8 +106,9 @@ export default {
       .then(function (res) {
         This.banner = res.data.focus.data.content
         This.songlist = res.data.recomPlaylist.data.v_hot
+        This.newSong = res.data.new_song.data.songlist
         This.scroll.refresh()
-        // console.log(res.data)
+        console.log(res.data.new_song.data.songlist)
       })
     // https://c.y.qq.com
     let RecommendSong = '/qqCMusic' + this.$store.state.url.homeRecommendSong

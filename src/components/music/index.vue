@@ -46,7 +46,13 @@
         </div>
       </div>
     </div>
-    <audio :src="url" autoplay="autoplay" id="music"></audio>
+    <audio
+      :src="url"
+      autoplay="autoplay"
+      id="music"
+      controls
+      hidden="true"
+    ></audio>
   </div>
 </template>
 
@@ -142,9 +148,11 @@ export default {
       let music = document.getElementById('music')
       if (music.paused) {
         this.stopOff = true
+        this.$store.state.songtj = true
         music.play()
       } else {
         this.stopOff = false
+        this.$store.state.songtj = false
         music.pause()
       }
     }
@@ -170,17 +178,11 @@ export default {
       This.$store.commit('songIndexFn', 1)
       This.jdtData = 100
       This.stopOff = false
-      // if (This.songList[This.$store.state.songIndex - 1]) {
-      //   This.song = This.songList[This.$store.state.songIndex - 1]
-      //   This.songRequest()
-      // } else {
-      //   // 如果下一首没了，则把所以回调到上一首，但是不播放
-      // }
-      // console.log(This.$store.state.songIndex)
     })
     music.addEventListener('canplay', function () {
       This.SongLeng = music.duration
       This.stopOff = true
+      This.$store.state.songtj = true
       if (This.Time === '') {
         This.Time = setInterval(() => {
           This.jdtData = music.currentTime / music.duration * 100
@@ -195,6 +197,10 @@ export default {
     // }, 1000)
   },
   watch: {
+    url () {
+      let music = document.getElementById('music')
+      music.play()
+    },
     songList (to) {
       // this.song = to[this.$store.state.songIndex - 1]
       // this.songRequest()

@@ -8,7 +8,7 @@
       <x-input title="密码" placeholder="必填" v-model="user.passWord"></x-input>
     </Group>
     <div class="btn">
-      <div>
+      <div @click="login">
         <x-button>登录</x-button>
       </div>
       <div>
@@ -34,6 +34,20 @@ export default {
         Account: '',
         passWord: ''
       }
+    }
+  },
+  methods: {
+    login () {
+      let list = this.$store.state.userList
+      let This = this
+      list.forEach(el => {
+        if (el.Account === this.user.Account && el.passWord === this.user.passWord) {
+          el.login = true
+          // console.log(el)
+          This.$store.commit('userListFn', list)
+          This.$router.replace('/')
+        }
+      })
     }
   }
 }
