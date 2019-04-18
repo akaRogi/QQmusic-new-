@@ -75,7 +75,7 @@ export default {
     hei () {
       let Box = document.getElementsByClassName('BScroll')[0].offsetTop
       let scrollTop = document.documentElement.clientHeight
-      this.heipx = 'height:' + (scrollTop - Box - 50) + 'px'
+      this.heipx = 'height:' + (scrollTop - Box + 40) + 'px'
     },
     requer (off) {
       let This = this
@@ -154,6 +154,7 @@ export default {
     width: 50px;
     background: #32c27c;
     height: 107px;
+    z-index: 9;
   }
   .searchBox >>> .vux-search-box{
     width: calc(100% - 50px);

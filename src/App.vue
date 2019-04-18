@@ -3,8 +3,10 @@
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive"/>
     </keep-alive>
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive" name="user"/>
+    </keep-alive>
     <router-view v-if="!$route.meta.keepAlive"/>
-    <router-view name="user"/>
     <div class="musicDiv" @click="musicShow = true">
       音乐
     </div>
@@ -49,7 +51,7 @@
         </div>
       </group>
     </actionsheet>
-    <toast v-model="tis" :time="1000" @on-hide="$store.state.tis = false">成功</toast>
+    <toast v-model="tis" :time="500" @on-hide="$store.state.tis = false">成功</toast>
   </div>
 </template>
 
@@ -83,9 +85,17 @@ export default {
       console.log(data)
       let store = this.$store.state
       // 让歌单的图片变成这首歌的封面
+      let id = ''
       user.songList.forEach(el => {
         if (el.id === data.id) {
-          el.logo = store.img.songShowT + this.$store.state.song.albummid + store.img.sonH
+          if (this.$store.state.song.albummid) {
+            id = this.$store.state.song.albummid
+          } else if (this.$store.state.song.album) {
+            if (this.$store.state.song.album.mid) {
+              id = this.$store.state.song.album.mid
+            }
+          }
+          el.logo = store.img.songShowT + id + store.img.sonH
           el.list.push(this.$store.state.song)
         }
       })

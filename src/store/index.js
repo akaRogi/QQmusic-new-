@@ -32,7 +32,9 @@ let store = new Vuex.Store({
     songList: [],
     songIndex: 0,
     tis: false,
+    // 是否显示收藏歌曲
     loveOff: false,
+    // 收藏歌曲展示储存的数据
     song: {},
     songtj: true
   },
@@ -122,7 +124,7 @@ let store = new Vuex.Store({
           localStorage.setItem('QQUserLogin', JSON.stringify(el))
         }
       })
-      return user || {}
+      return user || {songList: []}
     },
     songTitle (state) {
       let Title

@@ -80,7 +80,13 @@ export default {
     list () {
       let list = this.data
       list.forEach(el => {
-        el.album.mid = 'https://y.gtimg.cn/music/photo_new/T002R90x90M000' + el.album.mid + '.jpg?max_age=2592000'
+        if (el.album) {
+          if (el.album.mid) {
+            el.album.mid = 'https://y.gtimg.cn/music/photo_new/T002R90x90M000' + el.album.mid + '.jpg?max_age=2592000'
+          }
+        } else {
+          el.album.mid = ''
+        }
       })
       return list
     }

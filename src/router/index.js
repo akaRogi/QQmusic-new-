@@ -112,7 +112,10 @@ const router = new Router({
 })
 export default router
 router.beforeEach((to, from, next) => {
-  if (to.name === 'registered' || to.name === 'login') {
+  if (
+    to.name === 'registered' ||
+    to.name === 'login'
+  ) {
     if (!JSON.parse(localStorage.getItem('QQUserLogin')) || JSON.parse(localStorage.getItem('QQUserLogin')) === {}) {
       console.log(JSON.parse(localStorage.getItem('QQUserLogin')))
       next()

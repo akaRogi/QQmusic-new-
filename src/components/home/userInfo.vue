@@ -40,20 +40,69 @@
                   @click.native="showContent001 = !showContent001"
                 ></cell>
                 <div class="slide" :class="showContent001?'animate':''">
-                  <cell
-                    v-if="user.Account"
-                    title="新建歌单"
-                    link="/SongListPush"
-                    is-link
-                  ></cell>
-                  <cell
-                    v-for="(item, index) in user.songList"
-                    :link="'/LocalhostSon/' + item.id"
-                    :key="index"
-                    :title="item.title"
-                    :value="item.list.length + '首'"
-                    is-link
-                  ></cell>
+                  <!--<cell-->
+                    <!--v-if="user.Account"-->
+                    <!--title="新建歌单"-->
+                    <!--link="/SongListPush"-->
+                    <!--is-link-->
+                  <!--&gt;</cell>-->
+                  <!--<cell-->
+                    <!--v-if="user.Account"-->
+                    <!--title="排序歌单"-->
+                    <!--is-link-->
+                  <!--&gt;</cell>-->
+                  <div class="fig" v-if="user.Account">
+                    <router-link
+                      tag="div"
+                      to="/SongListPush"
+                    >新建歌单</router-link>
+                    <div
+                      @click="paixu = !paixu"
+                    >排序歌单</div>
+                  </div>
+                  <SlickList
+                    :lockToContainerEdges="true"
+                    axis="y"
+                    lockAxis="y"
+                    helperClass="show"
+                    v-model="user.songList"
+                    class="SortableList"
+                    @input="getChangeLists"
+                    v-show="paixu"
+                  >
+                    <SlickItem v-for="(item, index) in user.songList" class="SortableItem" :index="index" :key="index">
+                      <cell
+                        :title="item.title"
+                        :value="item.list.length + '首'"
+                        :link="'/LocalhostSon/' + item.id"
+                        is-link
+                        class="post"
+                      >
+                        <slick-list
+                          :lockToContainerEdges="true"
+                          axis="y"
+                          lockAxis="y"
+                          v-model="user.songList"
+                          class="SortableList2"
+                        ></slick-list>
+                      </cell>
+                    </SlickItem>
+                  </SlickList>
+                  <div
+                    v-show="!paixu"
+                    @click="value = true"
+                  >
+                    <cell
+                      v-for="(item, index) in user.songList"
+                      :key="index"
+                      :title="item.title"
+                      :value="item.list.length + '首'"
+                      :link="'/LocalhostSon/' + item.id"
+                      is-link
+                      class="post"
+                    >
+                    </cell>
+                  </div>
                 </div>
               </div>
               <div class="title vux-1px-b">
@@ -67,10 +116,10 @@
                 <div class="slide" :class="showContent002?'animate':''">
                   <cell
                     v-for="(item, index) in user.Collection"
-                  :key="index"
-                  :title="item.title"
-                  :value="user.Account"
-                  is-link></cell>
+                    :key="index"
+                    :title="item.title"
+                    :value="user.Account"
+                    is-link></cell>
                 </div>
               </div>
             </group>
@@ -90,6 +139,7 @@
 </template>
 
 <script>
+import { SlickList, SlickItem } from 'vue-slicksort'
 import { Group, Popup, Cell, XButton } from 'vux'
 export default {
   name: 'userInfo',
@@ -97,23 +147,46 @@ export default {
     Group,
     Popup,
     Cell,
-    XButton
+    XButton,
+    SlickList,
+    SlickItem
   },
   data () {
     return {
       value: false,
+      value2: false,
       showContent001: false,
-      showContent002: false
+      showContent002: false,
+      flag: true,
+      paixu: false
     }
   },
   methods: {
     usetOut () {
       this.$store.commit('userOut')
+    },
+    getChangeList (val) {
+      console.log(val, 'val')
+    },
+    ff () {
+      alert(2)
+    },
+    getChangeLists (vals) {
+      let user = this.user
+      user.songList = vals
+      this.$store.commit('userSongPudate', user)
+      // console.log(user)
+      // console.log(vals, 'vals')
     }
   },
   computed: {
     user () {
       return this.$store.state.user
+    }
+  },
+  watch: {
+    value (to) {
+      console.log(to)
     }
   }
 }
@@ -202,6 +275,10 @@ export default {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
   }
+  .SortableItem{
+    height: 78px;
+    position: relative;
+  }
   .SongList{
     position: absolute;
     width: 100%;
@@ -232,5 +309,24 @@ export default {
   }
   .slide >>> .weui-cell{
     padding-left: 35px;
+  }
+  .show{
+    z-index: 9999999999;
+  }
+  .SortableList2{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+  .fig{
+    display: flex;
+    padding: 0 10px;
+    text-align: center;
+  }
+  .fig div{
+    width: 100%;
+    padding: 10px 0;
   }
 </style>

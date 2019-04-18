@@ -57,7 +57,7 @@ export default {
       let Box = document.getElementsByClassName('BScroll')[0].offsetTop
       let scrollTop = document.documentElement.clientHeight
       this.height = 'height:' + (scrollTop - Box) + 'px'
-      console.log(this.height)
+      // console.log(this.height)
     },
     // 歌单展示
     SongShow (data) {
@@ -108,7 +108,7 @@ export default {
         This.songlist = res.data.recomPlaylist.data.v_hot
         This.newSong = res.data.new_song.data.songlist
         This.scroll.refresh()
-        console.log(res.data.new_song.data.songlist)
+        // console.log(res.data.new_song.data.songlist)
       })
     // https://c.y.qq.com
     let RecommendSong = '/qqCMusic' + this.$store.state.url.homeRecommendSong

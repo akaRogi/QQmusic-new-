@@ -4,6 +4,7 @@
       <li
         v-for="(item, index) in data"
         :key="index"
+        @click="pushSong(item)"
       >
         <h6>{{item.name || item.title}}</h6>
 
@@ -13,6 +14,9 @@
         >
         {{SongName.name}}
         </span></p>
+        <div class="icon" @click="songInfo(item)">
+          <x-icon class="cell-x-icon" type="ios-heart-outline" size="30"></x-icon>
+        </div>
       </li>
     </ul>
   </div>
@@ -21,7 +25,18 @@
 <script>
 export default {
   name: 'searchList',
-  props: ['data']
+  props: ['data'],
+  methods: {
+    pushSong (data) {
+      this.$store.commit('songIndexFn', 1)
+      this.$store.commit('songPush', data)
+    },
+    songInfo (data) {
+      this.$store.state.song = data
+      this.$store.state.loveOff = true
+      console.log(data)
+    }
+  }
 }
 </script>
 
@@ -40,6 +55,7 @@ export default {
     background-image: url("../../assets/img/search_sprite.png");
   }
   .list_search li h6 {
+    padding-top: 12px;
     margin-bottom: 5px;
     line-height: 36px;
     font-size: 32px;
@@ -51,5 +67,14 @@ export default {
   }
   .list_search li span:nth-child(n+1) {
     margin-right: 20px;
+  }
+  .icon{
+    position: absolute;
+    top: calc(50% - 35px);
+    right: 10px;
+  }
+  .cell-x-icon {
+    display: block;
+    fill: #9a999e;
   }
 </style>

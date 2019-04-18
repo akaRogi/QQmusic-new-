@@ -46,6 +46,7 @@
         </div>
       </div>
     </div>
+    <lrc></lrc>
     <audio
       :src="url"
       autoplay="autoplay"
@@ -57,11 +58,14 @@
 </template>
 
 <script>
+import Lyric from 'lyric-parser'
 import { Range } from 'vux'
+import lrc from './lrc'
 export default {
   name: 'index',
   components: {
-    Range
+    Range,
+    lrc
   },
   data () {
     return {
@@ -70,7 +74,8 @@ export default {
       url: '',
       SongLeng: 0,
       Time: '',
-      stopOff: false
+      stopOff: false,
+      currentLyric: {}
     }
   },
   methods: {
@@ -87,6 +92,8 @@ export default {
       let title
       if (data.songname) {
         title = data.songname
+      } else if (data.title) {
+        title = data.title
       }
       return title
     },
@@ -96,6 +103,10 @@ export default {
       let H = this.$store.state.img.sonH
       if (data.albummid) {
         img = data.albummid
+      } else if (data.album) {
+        if (data.album.mid) {
+          img = data.album.mid
+        }
       }
       return T + img + H
     },
@@ -109,11 +120,15 @@ export default {
       if (this.song.songmid) {
         url = this.song.songmid
         console.log(4, url)
+      } else if (this.song.mid) {
+        url = this.song.mid
       }
+      console.log(this.song)
       let This = this
       let RecommendSong = `/qqCMusic/base/fcgi-bin/fcg_music_express_mobile3.fcg?format=json205361747&platform=yqq&cid=205361747&songmid=${url}&filename=C400${url}.m4a&guid=126548448`
       this.axios.get(RecommendSong)
         .then(function (res) {
+          console.log(res.data)
           let id = res.data.data.items[0].filename
           let key = res.data.data.items[0].vkey
           // 原来可用，但是学校屏蔽了请求
@@ -121,6 +136,23 @@ export default {
           // 虾米代替
           // This.url = 'http://win.web.nf03.sycdn.kuwo.cn/54a67054929715cfcf3d1c788856a260/5cb56f19/resource/a3/12/12/1856993921.aac'
           console.log(T + id + H + key)
+        })
+      let id
+      if (this.song.songid) {
+        id = this.song.songid
+      }
+      this.axios.get(`/qqCMusic/lyric/fcgi-bin/fcg_query_lyric.fcg?g_tk=5381&uin=0&format=json&inCharset=utf-8&outCharset=utf-8&notice=0&platform=h5&needNewCode=1&nobase64=1&musicid=${id}&songtype=0&_=1513437581324`)
+        .then(function (res) {
+          console.log(res.data)
+          let num1 = res.data.indexOf('(')
+          let num2 = res.data.indexOf(')')
+          let resultData = JSON.parse(res.data.substring(num1 + 1, num2))
+          console.log(resultData.lyric)
+          let lrc = resultData.lyric
+          lrc = lrc.replace(/&#(\d+);/g, (str, match) => String.fromCharCode(match))
+          console.info(lrc)
+          This.currentLyric = new Lyric(lrc, This.handleLyric)
+          console.log(This.currentLyric)
         })
     },
     songPuda (num) {
@@ -186,7 +218,8 @@ export default {
       if (This.Time === '') {
         This.Time = setInterval(() => {
           This.jdtData = music.currentTime / music.duration * 100
-          console.log(music.currentTime / music.duration * 100)
+          // console.log(music.currentTime / music.duration * 100)
+          console.log((music.currentTime * 1000).toFixed(0))
           // console.log(222222222)
           // console.log(md.currentTime)
         }, 1000)
@@ -214,9 +247,9 @@ export default {
         clearInterval(this.Time)
       }
       if (this.songList[to - 1]) {
-        console.log(1, this.songList[to - 1])
+        // console.log(1, this.songList[to - 1])
         this.song = this.songList[to - 1]
-        console.log(2, this.song)
+        // console.log(2, this.song)
         this.songRequest()
       } else {
         // this.$store.commit('songIndexFn', -1)
