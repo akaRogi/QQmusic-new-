@@ -30,8 +30,8 @@ export default {
         {title: this.title,
           list: [],
           id: Math.round(Math.random() * 9999999 + 100000),
-          logo: 'https://b-ssl.duitang.com/uploads/item/201703/22/20170322205435_jYRkL.thumb.700_0.jpeg',
-          headurl: 'https://b-ssl.duitang.com/uploads/item/201703/22/20170322205435_jYRkL.thumb.700_0.jpeg',
+          logo: 'http://120.78.175.25/material/img/musicImg.jpeg',
+          headurl: 'http://120.78.175.25/material/img/userImg.jpeg',
           user: this.$store.state.user.Account
         }
       )

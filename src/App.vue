@@ -80,8 +80,12 @@ export default {
     },
     songPush (data) {
       let user = this.userFn
+      console.log(data)
+      let store = this.$store.state
+      // 让歌单的图片变成这首歌的封面
       user.songList.forEach(el => {
         if (el.id === data.id) {
+          el.logo = store.img.songShowT + this.$store.state.song.albummid + store.img.sonH
           el.list.push(this.$store.state.song)
         }
       })
@@ -148,8 +152,8 @@ export default {
 <style scoped>
   .musicDiv{
     position: fixed;
-    top: 0;
-    right: 0;
+    top: 20px;
+    right: 10px;
     z-index: 999;
   }
   .MusicBox{

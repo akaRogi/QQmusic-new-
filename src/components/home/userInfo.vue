@@ -48,9 +48,10 @@
                   ></cell>
                   <cell
                     v-for="(item, index) in user.songList"
+                    :link="'/LocalhostSon/' + item.id"
                     :key="index"
                     :title="item.title"
-                    :value="user.Account"
+                    :value="item.list.length + '首'"
                     is-link
                   ></cell>
                 </div>
@@ -123,12 +124,21 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 9999999;
+    z-index: 501;
   }
   .Box{
     position: relative;
     width: 100%;
     height: 100%;
+  }
+  .iconBox{
+    position: absolute;
+    top: 20px;
+    left: 10px;
+  }
+  .iconBox i{
+    font-size: 40px;
+    color: #fff;
   }
   .userImg{
     width: 100%;

@@ -85,8 +85,8 @@ export default {
     },
     title (data) {
       let title
-      if (data.albumname) {
-        title = data.albumname
+      if (data.songname) {
+        title = data.songname
       }
       return title
     },

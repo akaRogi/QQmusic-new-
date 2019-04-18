@@ -39,7 +39,7 @@
             @click="oneSong(item)"
           >
             <div class="SongShowBox">
-              <div class="icon" @click.stop="shoucanShow(item)">
+              <div class="icon" @click.stop="shoucanShow(item)" v-if="!off">
                 <x-icon type="ios-heart-outline" size="30" class="vux-x-icon"></x-icon>
               </div>
               <div class="Num">
@@ -63,7 +63,7 @@
 import BScroll from 'better-scroll'
 export default {
   name: 'sonList',
-  props: ['data'],
+  props: ['data', 'off'],
   data () {
     return {
       heipx: '',

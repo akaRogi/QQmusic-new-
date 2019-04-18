@@ -6,6 +6,7 @@ import userInfo from '@/components/home/userInfo'
 import search from '@/components/Search'
 import rank from '@/components/rank'
 import songSort from '@/components/songSort'
+import newSon from '@/components/newSong'
 import MvSort from '@/components/MvList/index'
 import Mv from '@/components/Mv'
 import ranklist from '@/components/rank/ranklist'
@@ -14,6 +15,7 @@ import registered from '@/components/user/registered'
 import login from '@/components/user/login'
 import UserSong from '@/components/user/SongList'
 import SongListPush from '@/components/user/SongListPush'
+import LocalhostSon from '@/components/user/LocalhostSon'
 
 Vue.use(Router)
 
@@ -95,6 +97,16 @@ const router = new Router({
       path: '/SongListPush',
       name: 'SongListPush',
       component: SongListPush
+    },
+    {
+      path: '/LocalhostSon/:id?',
+      name: 'LocalhostSon',
+      component: LocalhostSon
+    },
+    {
+      path: '/newSon',
+      name: 'newSon',
+      component: newSon
     }
   ]
 })
