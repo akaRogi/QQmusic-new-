@@ -78,7 +78,7 @@ export default {
     this.hei()
     this.$nextTick(() => {
       this.scroll = new BScroll(this.$refs.wrapper, { // 初始化better-scroll
-        probeType: 1, // 1 滚动的时候会派发scroll事件，会截流。2滚动的时候实时派发scroll事件，不会截流。 3除了实时派发scroll事件，在swipe的情况下仍然能实时派发scroll事件
+        probeType: 2, // 1 滚动的时候会派发scroll事件，会截流。2滚动的时候实时派发scroll事件，不会截流。 3除了实时派发scroll事件，在swipe的情况下仍然能实时派发scroll事件
         click: true // 是否派发click事件
       })
       // 滑动过程中事件

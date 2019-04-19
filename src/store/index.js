@@ -36,7 +36,8 @@ let store = new Vuex.Store({
     loveOff: false,
     // 收藏歌曲展示储存的数据
     song: {},
-    songtj: true
+    songtj: true,
+    SongTime: ''
   },
   mutations: {
     // 定义的方法，参数一: 行参，填入任何字母都可以。  参数二: 传参。

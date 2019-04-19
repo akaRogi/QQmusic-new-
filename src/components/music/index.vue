@@ -11,9 +11,11 @@
     <div class="bg">
       <img :src="imgFn(song)" alt="">
     </div>
-    <div class="imgShow">
-      <img :src="imgFn(song)" alt="">
-    </div>
+      <transition name="fade">
+        <div class="imgShow" v-show="!lrc">
+          <img :src="imgFn(song)" alt="" @click="lrcShow">
+        </div>
+      </transition>
     <div class="bottom">
       <div class="jdt">
         <div
@@ -46,7 +48,12 @@
         </div>
       </div>
     </div>
-    <lrc></lrc>
+    <transition name="fade">
+      <div class="lrcBox" v-show="lrc" @mousedown="down">
+        <lrc :lrc="currentLyric" :lrfOff.sync="lrc"></lrc>
+      </div>
+    </transition>
+    <div class="mark" v-show="lrc"></div>
     <audio
       :src="url"
       autoplay="autoplay"
@@ -75,10 +82,18 @@ export default {
       SongLeng: 0,
       Time: '',
       stopOff: false,
-      currentLyric: {}
+      currentLyric: {},
+      lrc: false
     }
   },
   methods: {
+    down () {
+      alert(111)
+      console.log(222)
+    },
+    lrcShow () {
+      this.lrc = true
+    },
     ff () {
       clearInterval(this.Time)
       this.Time = ''
@@ -134,8 +149,8 @@ export default {
           // 原来可用，但是学校屏蔽了请求
           This.url = T + id + H + key
           // 虾米代替
-          // This.url = 'http://win.web.nf03.sycdn.kuwo.cn/54a67054929715cfcf3d1c788856a260/5cb56f19/resource/a3/12/12/1856993921.aac'
-          console.log(T + id + H + key)
+          // This.url = 'http://localhost/酒僧.m4a'
+          // console.log (T + id + H + key)
         })
       let id
       if (this.song.songid) {
@@ -206,8 +221,12 @@ export default {
     let music = document.getElementById('music')
     music.addEventListener('ended', function () {
       clearInterval(This.Time)
-      // 播放完毕，下一首
-      This.$store.commit('songIndexFn', 1)
+      // 播放完毕，判断下一首是否还存在歌曲
+      if (This.songList[This.songThis]) {
+        This.$store.commit('songIndexFn', 1)
+      } else {
+        alert('列表播放完毕')
+      }
       This.jdtData = 100
       This.stopOff = false
     })
@@ -219,10 +238,10 @@ export default {
         This.Time = setInterval(() => {
           This.jdtData = music.currentTime / music.duration * 100
           // console.log(music.currentTime / music.duration * 100)
-          console.log((music.currentTime * 1000).toFixed(0))
+          This.$store.state.SongTime = (music.currentTime * 1000).toFixed(0)
           // console.log(222222222)
           // console.log(md.currentTime)
-        }, 1000)
+        }, 500)
       }
     })
     // setInterval(() => {
@@ -356,5 +375,26 @@ export default {
     margin: auto;
     box-shadow: 0 0 15px 0 rgba(235, 235, 235, 0.63);
     /*border: 2px solid #ebebeb;*/
+  }
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+  }
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+  }
+  .lrcBox{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    z-index: 11;
+  }
+  .mark{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    z-index: 10;
+    background: rgba(0,0,0,.2);
   }
 </style>
