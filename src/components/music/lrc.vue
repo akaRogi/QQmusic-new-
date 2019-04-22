@@ -89,7 +89,7 @@ export default {
         })
         elemShow.className = 'show'
         // console.log(this.$refs.wrapper)
-        console.log(elemShow)
+        // console.log(elemShow)
         if (this.lrcShow) {
           this.scroll.scrollToElement(lineEl, 1000)
         }

@@ -1,7 +1,7 @@
 <template>
   <div class="music">
     <div class="top">
-      <div class="ret" @click="$emit('update:musicShow', false)">
+      <div class="ret" @click="$store.state.musicShow = false">
         <x-icon type="ios-arrow-left" size="30"></x-icon>
       </div>
       <div class="titleBox">
@@ -64,7 +64,7 @@
       autoplay="autoplay"
       id="music"
       controls
-      :loop="typeIcon"
+      :loop="loop"
       hidden="true"
     ></audio>
   </div>
@@ -90,16 +90,21 @@ export default {
       stopOff: false,
       currentLyric: {},
       lrc: false,
+      loop: false,
       typeIcon: 'all'
     }
   },
   methods: {
-    typeShow(data) {
+    typeShow (data) {
+      if (data === 'loop') {
+        this.loop = true
+      } else {
+        this.loop = false
+      }
       this.typeIcon = data
-      // console.log()
+      console.log(data)
     },
     down () {
-      alert(111)
       console.log(222)
     },
     lrcShow () {
@@ -140,12 +145,11 @@ export default {
       let url
       // let T = 'http://ws.stream.qqmusic.qq.com/'
       // let T = 'http://dl.stream.qqmusic.qq.com/'
-      console.log(3, this.song.songmid)
+      // console.log(3, this.song.songmid)
       let T = '/songShow/'
       let H = '?fromtag=0&guid=126548448&vkey='
       if (this.song.songmid) {
         url = this.song.songmid
-        console.log(4, url)
       } else if (this.song.mid) {
         url = this.song.mid
       }
@@ -157,8 +161,21 @@ export default {
           console.log(res.data)
           let id = res.data.data.items[0].filename
           let key = res.data.data.items[0].vkey
-          // 原来可用，但是学校屏蔽了请求
-          This.url = T + id + H + key
+          if (key) {
+            // 原来可用，但是学校屏蔽了请求
+            This.url = T + id + H + key
+          } else {
+            if (!This.loop) {
+              This.$store.commit('songIndexFn', 1)
+            } else if (This.typeIcon === '') {
+              let num = Math.round(Math.random() * This.songList.length)
+              if (This.$store.state.songIndex === Math.round(Math.random() * This.songList.length)) {
+                This.$store.state.songIndex = Math.round(Math.random() * This.songList.length + 1)
+              } else {
+                This.$store.state.songIndex = num
+              }
+            }
+          }
           // 虾米代替
           // This.url = 'http://localhost/酒僧.m4a'
           // console.log (T + id + H + key)
@@ -184,9 +201,18 @@ export default {
           console.log(This.currentLyric)
         })
     },
-    songPuda (num) {
+    songPuda (data) {
       // 1下一首，-1上一首
-      this.$store.commit('songIndexFn', num)
+      if (this.typeIcon === '') {
+        let num = Math.round(Math.random() * this.songList.length)
+        if (this.$store.state.songIndex === Math.round(Math.random() * this.songList.length)) {
+          this.$store.state.songIndex = Math.round(Math.random() * this.songList.length + 1)
+        } else {
+          this.$store.state.songIndex = num
+        }
+      } else {
+        this.$store.commit('songIndexFn', data)
+      }
       // if (this.songList.length !== 1) {
       //   if (this.songList.length !== this.songThis) {
       //     if (this.songThis !== 1) {
@@ -235,16 +261,19 @@ export default {
     }, 50)
     let music = document.getElementById('music')
     music.addEventListener('ended', function () {
-      clearInterval(This.Time)
-      if (this.typeIcon !== 'loop') {
+      // clearInterval(This.Time)
+      if (!this.loop) {
         // 播放完毕，判断下一首是否还存在歌曲
-        if (This.songList[This.songThis]) {
-          This.$store.commit('songIndexFn', 1)
-        } else {
-          alert('列表播放完毕')
-        }
+        This.$store.commit('songIndexFn', 1)
         This.jdtData = 100
         This.stopOff = false
+      } else if (this.typeIcon === '') {
+        let num = Math.round(Math.random() * this.songList.length)
+        if (this.$store.state.songIndex === Math.round(Math.random() * this.songList.length)) {
+          this.$store.state.songIndex = Math.round(Math.random() * this.songList.lengththis.songList.length + 1)
+        } else {
+          this.$store.state.songIndex = num
+        }
       }
     })
     music.addEventListener('canplay', function () {

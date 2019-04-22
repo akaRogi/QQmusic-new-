@@ -306,9 +306,30 @@ export default {
       } else {
         res = data
       }
+      let This = this
+      let list = this.$store.state.songList
+      let off = true
+      list.forEach((el, index) => {
+        if (el.songmid) {
+          if (el.songmid === data.songmid) {
+            This.$store.state.songIndex = index + 1
+            This.$store.state.musicShow = true
+            off = false
+          }
+        } else if (el.mid) {
+          if (el.mid === data.mid) {
+            This.$store.state.songIndex = index + 1
+            This.$store.state.musicShow = true
+            off = false
+          }
+          // url = this.song.mid
+        }
+      })
       // console.log(10, res)
-      this.$store.commit('songPush', res)
-      this.$store.commit('songIndexFn', 1)
+      if (off) {
+        this.$store.commit('songPush', res)
+        this.$store.commit('songIndexFn', 1)
+      }
     },
     shoucanShow (data) {
       this.$store.state.loveOff = true

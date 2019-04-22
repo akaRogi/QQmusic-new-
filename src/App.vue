@@ -7,16 +7,14 @@
       <router-view v-if="$route.meta.keepAlive" name="user"/>
     </keep-alive>
     <router-view v-if="!$route.meta.keepAlive"/>
-    <div class="musicDiv" @click="musicShow = true">
+    <div class="musicDiv" @click="$store.state.musicShow = true" v-show="music">
       音乐
     </div>
     <div
       class="MusicBox"
       :class="{show : musicShow}"
     >
-      <music-box
-        :musicShow.sync="musicShow"
-      ></music-box>
+      <music-box></music-box>
     </div>
     <actionsheet
       v-model="show2"
@@ -51,7 +49,7 @@
         </div>
       </group>
     </actionsheet>
-    <toast v-model="tis" :time="500" @on-hide="$store.state.tis = false">成功</toast>
+    <toast v-model="tis" :time="1000" @on-hide="$store.state.tis = false">成功</toast>
   </div>
 </template>
 
@@ -73,7 +71,8 @@ export default {
       tis: false,
       show2: false,
       titleTxt: '',
-      showContent002: false
+      showContent002: false,
+      music: true
     }
   },
   methods: {
@@ -96,7 +95,7 @@ export default {
             }
           }
           el.logo = store.img.songShowT + id + store.img.sonH
-          el.list.push(this.$store.state.song)
+          el.list.unshift(this.$store.state.song)
         }
       })
       this.$store.commit('userSongPudate', user)
@@ -113,11 +112,19 @@ export default {
     },
     loveOffFn () {
       return this.$store.state.loveOff
+    },
+    musicShowFn () {
+      return this.$store.state.musicShow
     }
   },
   created () {
     let user = JSON.parse(localStorage.getItem('QQmusicUser')) || []
     this.$store.commit('userListFn', user)
+    if (this.$route.name === 'home') {
+      this.music = true
+    } else {
+      this.music = false
+    }
   },
   mounted () {
     var audio = document.getElementById('music')
@@ -154,6 +161,16 @@ export default {
     },
     loveOffFn (to) {
       this.show2 = to
+    },
+    musicShowFn (to) {
+      this.musicShow = to
+    },
+    $route (to) {
+      if (to.name === 'home') {
+        this.music = true
+      } else {
+        this.music = false
+      }
     }
   }
 }
@@ -175,7 +192,7 @@ export default {
     height: 100%;
   }
   .MusicBox.show{
-    z-index: 99999;
+    z-index: 999999999999;
   }
   .slide {
     padding: 0 20px;

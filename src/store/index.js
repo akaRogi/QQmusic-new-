@@ -28,6 +28,7 @@ let store = new Vuex.Store({
       DieT: 'https://y.gtimg.cn/music/photo_new/T002R150x150M000',
       userImgT: 'https://y.gtimg.cn/music/photo_new/T001R150x150M000'
     },
+    musicShow: false,
     MvId: '',
     songList: [],
     songIndex: 0,
@@ -50,6 +51,7 @@ let store = new Vuex.Store({
       // console.log(state.songList)
     },
     songPush (state, data) {
+      state.musicShow = true
       state.songList.splice(state.songIndex, 0, data)
       // console.log(state.songList)
     },
