@@ -107,7 +107,7 @@
               </div>
               <div class="title vux-1px-b">
                 <cell
-                  :title="'我的歌单'"
+                  :title="'我的收藏'"
                   is-link
                   :border-intent="false"
                   :arrow-direction="showContent002 ? 'up' : 'down'"
@@ -115,10 +115,11 @@
                 ></cell>
                 <div class="slide" :class="showContent002?'animate':''">
                   <cell
-                    v-for="(item, index) in user.Collection"
+                    v-for="(item, index) in userCollection"
                     :key="index"
-                    :title="item.title"
-                    :value="user.Account"
+                    :title="item.dissname"
+                    :value="item.nickname"
+                    :link="'/sonSortMain/' + item.disstid"
                     is-link></cell>
                 </div>
               </div>
@@ -158,7 +159,8 @@ export default {
       showContent001: false,
       showContent002: false,
       flag: true,
-      paixu: false
+      paixu: false,
+      userCollection: []
     }
   },
   methods: {
@@ -186,7 +188,14 @@ export default {
   },
   watch: {
     value (to) {
-      console.log(to)
+      let id = this.user.Collection.join(',')
+      let This = this
+      let RecommendSong = `/qqCMusic/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid=${id}&g_tk=1176666473&loginUin=1737481208&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0`
+      this.axios.get(RecommendSong)
+        .then(function (res) {
+          This.userCollection = res.data.cdlist
+          console.log(res.data)
+        })
     }
   }
 }
@@ -328,5 +337,9 @@ export default {
   .fig div{
     width: 100%;
     padding: 10px 0;
+  }
+  .userInfo >>> .slide{
+    height: 700px;
+    overflow-y: auto;
   }
 </style>

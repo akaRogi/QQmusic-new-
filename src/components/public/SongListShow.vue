@@ -15,7 +15,7 @@
           </div>
         </div>
         <div class="bf">
-          <div class="palylen" @click="th(data)">播放全部</div>
+          <div class="palylen" @click="playLeng(data)">播放全部</div>
         </div>
       </div>
       <div class="ImgBg">
@@ -32,40 +32,76 @@
         <!--{{data.topinfo}}-->
       </div>
       <div class="UlBox wrapper" ref="wrapper" :style="heipx">
-        <ul class="ul_box content">
-          <li
+        <!--<ul class="ul_box content">-->
+        <swipeout class="vux-1px-tb">
+          <swipeout-item
+            transition-mode="follow"
             v-for="(item, index) in list(data).list"
             :key="index"
-            @click="oneSong(item)"
           >
-            <div class="SongShowBox">
-              <div class="icon" @click.stop="shoucanShow(item)" v-if="!off">
-                <x-icon type="ios-heart-outline" size="30" class="vux-x-icon"></x-icon>
-              </div>
-              <div class="Num">
-                <span>{{index + 1}}</span>
-              </div>
-              <div class="li_list">
-                <div>
-                  <h3>{{sontitle(item).title}}</h3>
-                  <span v-for="(SongName, j) in sontitle(item).songer" :key="j">{{SongName.name}}</span>
+            <div slot="right-menu">
+              <swipeout-button type="primary" @click.native="shoucanShow(item)">收藏</swipeout-button>
+              <!--<swipeout-button type="warn">321312</swipeout-button>-->
+            </div>
+            <div
+              slot="content"
+              :class="{'vux-1px-b': index !== 3, 'vux-1px-t': index === 1}"
+              @click="oneSong(item)"
+            >
+              <div class="SongShowBox">
+                <!--<div class="icon" @click.stop="shoucanShow(item)" v-if="!off">-->
+                  <!--<x-icon type="ios-heart-outline" size="30" class="vux-x-icon"></x-icon>-->
+                <!--</div>-->
+                <div class="Num">
+                  <span>{{index + 1}}</span>
+                </div>
+                <div class="li_list">
+                  <div>
+                    <h3>{{sontitle(item).title}}</h3>
+                    <span v-for="(SongName, j) in sontitle(item).songer" :key="j">{{SongName.name}}</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </li>
-        </ul>
+          </swipeout-item>
+        </swipeout>
+          <!--<li-->
+            <!--v-for="(item, index) in list(data).list"-->
+            <!--:key="index"-->
+            <!--@click="oneSong(item)"-->
+          <!--&gt;-->
+            <!--<div class="SongShowBox">-->
+              <!--<div class="icon" @click.stop="shoucanShow(item)" v-if="!off">-->
+                <!--<x-icon type="ios-heart-outline" size="30" class="vux-x-icon"></x-icon>-->
+              <!--</div>-->
+              <!--<div class="Num">-->
+                <!--<span>{{index + 1}}</span>-->
+              <!--</div>-->
+              <!--<div class="li_list">-->
+                <!--<div>-->
+                  <!--<h3>{{sontitle(item).title}}</h3>-->
+                  <!--<span v-for="(SongName, j) in sontitle(item).songer" :key="j">{{SongName.name}}</span>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</li>-->
+        <!--</ul>-->
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { Swipeout, SwipeoutItem, SwipeoutButton } from 'vux'
 import BScroll from 'better-scroll'
 export default {
   name: 'sonList',
   props: ['data', 'off'],
+  components: {Swipeout, SwipeoutItem, SwipeoutButton},
   data () {
     return {
+      fav: '收藏',
+      deletee: '删除',
       heipx: '',
       timeOutEvent: 0,
       show2: false,
@@ -75,6 +111,41 @@ export default {
     }
   },
   methods: {
+    playLeng (data) {
+      let list
+      let off = false
+      let rank = []
+      if (data.songlist) {
+        list = data.songlist
+        list.forEach(el => {
+          if (el.data) {
+            off = true
+            rank.push(el.data)
+          }
+        })
+      } else if (data.list) {
+        list = data.list
+        list.forEach(el => {
+          if (el.musicData) {
+            off = true
+            rank.push(el.musicData)
+          }
+        })
+      }
+      // console.log(12, data)
+      let This = this
+      this.$store.commit('ResetIndexFn', 0)
+      setTimeout(() => {
+        This.$store.commit('songIndexFn', 1)
+      }, 50)
+      if (off) {
+        this.$store.commit('songTh', rank)
+      } else {
+        this.$store.commit('songTh', list)
+      }
+      // this.$store.commit('songIndexFn', 1)
+      // console.log(data)
+    },
     th (data) {
       let list = {list: [], leng: ''}
       // 区分数据来自排行榜还是来自别的地方
@@ -91,7 +162,7 @@ export default {
       let Box = document.getElementsByClassName('UlBox')[0].offsetTop
       let scrollTop = document.documentElement.clientHeight
       this.heipx = 'height:' + (scrollTop - Box) + 'px'
-      console.log(this.heipx)
+      // console.log(this.heipx)
     },
     img (data) {
       let img
@@ -204,6 +275,8 @@ export default {
     },
     userCollection () {
       console.log(this.data)
+      // console.log(this.data)
+      this.$store.commit('tisFn', true)
       this.$store.commit('userCollection', this.data.disstid)
     },
     songShow (data) {
@@ -224,8 +297,17 @@ export default {
       return off
     },
     oneSong (data) {
-      // console.log(data)
-      this.$store.commit('songPush', data)
+      console.log(data)
+      let res
+      if (data.data) {
+        res = data.data
+      } else if (data.musicData) {
+        res = data.musicData
+      } else {
+        res = data
+      }
+      // console.log(10, res)
+      this.$store.commit('songPush', res)
       this.$store.commit('songIndexFn', 1)
     },
     shoucanShow (data) {

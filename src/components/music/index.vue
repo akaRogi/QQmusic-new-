@@ -46,6 +46,11 @@
         <div class="btn" @click="songPuda(1)">
           <x-icon type="ios-arrow-right" size="30"></x-icon>
         </div>
+        <div class="BtnType">
+          <i class="iconfont icon-xunhuanbofang" v-if="typeIcon === 'all'" @click="typeShow('loop')"></i>
+          <i class="iconfont icon-danquxunhuan" v-else-if="typeIcon === 'loop'" @click="typeShow('')"></i>
+          <i class="iconfont icon-suijibofang" v-else @click="typeShow('all')"></i>
+        </div>
       </div>
     </div>
     <transition name="fade">
@@ -59,6 +64,7 @@
       autoplay="autoplay"
       id="music"
       controls
+      :loop="typeIcon"
       hidden="true"
     ></audio>
   </div>
@@ -83,10 +89,15 @@ export default {
       Time: '',
       stopOff: false,
       currentLyric: {},
-      lrc: false
+      lrc: false,
+      typeIcon: 'all'
     }
   },
   methods: {
+    typeShow(data) {
+      this.typeIcon = data
+      // console.log()
+    },
     down () {
       alert(111)
       console.log(222)
@@ -155,7 +166,10 @@ export default {
       let id
       if (this.song.songid) {
         id = this.song.songid
+      } else if (this.song.id) {
+        id = this.song.id
       }
+      console.log(13, this.song)
       this.axios.get(`/qqCMusic/lyric/fcgi-bin/fcg_query_lyric.fcg?g_tk=5381&uin=0&format=json&inCharset=utf-8&outCharset=utf-8&notice=0&platform=h5&needNewCode=1&nobase64=1&musicid=${id}&songtype=0&_=1513437581324`)
         .then(function (res) {
           console.log(res.data)
@@ -172,19 +186,20 @@ export default {
     },
     songPuda (num) {
       // 1下一首，-1上一首
-      if (this.songList.length !== 1) {
-        if (this.songList.length !== this.songThis) {
-          if (this.songThis !== 1) {
-            this.$store.commit('songIndexFn', num)
-          } else if (num === 1) {
-            this.$store.commit('songIndexFn', num)
-          }
-        } else if (num === -1) {
-          this.$store.commit('songIndexFn', num)
-        }
-      } else {
-        alert('没有可播放的歌曲')
-      }
+      this.$store.commit('songIndexFn', num)
+      // if (this.songList.length !== 1) {
+      //   if (this.songList.length !== this.songThis) {
+      //     if (this.songThis !== 1) {
+      //       this.$store.commit('songIndexFn', num)
+      //     } else if (num === 1) {
+      //       this.$store.commit('songIndexFn', num)
+      //     }
+      //   } else if (num === -1) {
+      //     this.$store.commit('songIndexFn', num)
+      //   }
+      // } else {
+      //   alert('没有可播放的歌曲')
+      // }
       // if (num === -1) {
       //   if (this.songThis > 1) {
       //     this.$store.commit('songIndexFn', num)
@@ -221,14 +236,16 @@ export default {
     let music = document.getElementById('music')
     music.addEventListener('ended', function () {
       clearInterval(This.Time)
-      // 播放完毕，判断下一首是否还存在歌曲
-      if (This.songList[This.songThis]) {
-        This.$store.commit('songIndexFn', 1)
-      } else {
-        alert('列表播放完毕')
+      if (this.typeIcon !== 'loop') {
+        // 播放完毕，判断下一首是否还存在歌曲
+        if (This.songList[This.songThis]) {
+          This.$store.commit('songIndexFn', 1)
+        } else {
+          alert('列表播放完毕')
+        }
+        This.jdtData = 100
+        This.stopOff = false
       }
-      This.jdtData = 100
-      This.stopOff = false
     })
     music.addEventListener('canplay', function () {
       This.SongLeng = music.duration
@@ -241,7 +258,7 @@ export default {
           This.$store.state.SongTime = (music.currentTime * 1000).toFixed(0)
           // console.log(222222222)
           // console.log(md.currentTime)
-        }, 500)
+        }, 200)
       }
     })
     // setInterval(() => {
@@ -265,14 +282,15 @@ export default {
       if (this.Time === '') {
         clearInterval(this.Time)
       }
-      if (this.songList[to - 1]) {
+      if (this.songList.length < to) {
+        this.$store.state.songIndex = 1
+      } else {
         // console.log(1, this.songList[to - 1])
         this.song = this.songList[to - 1]
         // console.log(2, this.song)
         this.songRequest()
-      } else {
         // this.$store.commit('songIndexFn', -1)
-        alert('列表播放完毕')
+        // alert('列表播放完毕')
       }
     }
   }
@@ -359,7 +377,16 @@ export default {
   }
   .btnBox{
     display: flex;
+    position: relative;
     justify-content: center;
+  }
+  .BtnType{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    top: 0;
+    left: 0;
   }
   .btnBox div{
     margin: 0 30px;

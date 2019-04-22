@@ -45,6 +45,10 @@ let store = new Vuex.Store({
     GetMvId (state, upadte) {
       state.MvId = upadte
     },
+    songTh (state, data) {
+      state.songList = data
+      // console.log(state.songList)
+    },
     songPush (state, data) {
       state.songList.splice(state.songIndex, 0, data)
       // console.log(state.songList)
@@ -52,6 +56,9 @@ let store = new Vuex.Store({
     songIndexFn (state, data) {
       state.songIndex = state.songIndex + data
       // console.log(state.songIndex)
+    },
+    ResetIndexFn (state, data) {
+      state.songIndex = data
     },
     userFn (state, data) {
       state.user = data
@@ -113,6 +120,10 @@ let store = new Vuex.Store({
     },
     tisFn (state, data) {
       state.tis = data
+    },
+    userCollection (state, data) {
+      state.user.Collection.unshift(data)
+      this.commit('userSongPudate', state.user)
     }
   },
   // 类似于计算属性

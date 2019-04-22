@@ -16,6 +16,8 @@ import login from '@/components/user/login'
 import UserSong from '@/components/user/SongList'
 import SongListPush from '@/components/user/SongListPush'
 import LocalhostSon from '@/components/user/LocalhostSon'
+import Songer from '@/components/songEr'
+import SongerShow from '@/components/songEr/SongErShow'
 
 Vue.use(Router)
 
@@ -107,6 +109,16 @@ const router = new Router({
       path: '/newSon',
       name: 'newSon',
       component: newSon
+    },
+    {
+      path: '/Songer',
+      name: 'Songer',
+      component: Songer
+    },
+    {
+      path: '/SongerShow/:id?',
+      name: 'SongerShow',
+      component: SongerShow
     }
   ]
 })
