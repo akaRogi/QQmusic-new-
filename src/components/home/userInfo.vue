@@ -188,14 +188,16 @@ export default {
   },
   watch: {
     value (to) {
-      let id = this.user.Collection.join(',')
-      let This = this
-      let RecommendSong = `/qqCMusic/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid=${id}&g_tk=1176666473&loginUin=1737481208&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0`
-      this.axios.get(RecommendSong)
-        .then(function (res) {
-          This.userCollection = res.data.cdlist
-          console.log(res.data)
-        })
+      if (this.user.Collection) {
+        let id = this.user.Collection.join(',')
+        let This = this
+        let RecommendSong = `/qqCMusic/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid=${id}&g_tk=1176666473&loginUin=1737481208&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0`
+        this.axios.get(RecommendSong)
+          .then(function (res) {
+            This.userCollection = res.data.cdlist
+            console.log(res.data)
+          })
+      }
     }
   }
 }
