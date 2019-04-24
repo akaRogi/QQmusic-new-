@@ -113,8 +113,19 @@ export default {
     ff () {
       clearInterval(this.Time)
       this.Time = ''
-      var md = document.getElementById('music')
-      md.currentTime = this.SongLeng * (this.jdtData / 100)
+      var music = document.getElementById('music')
+      music.currentTime = this.SongLeng * (this.jdtData / 100)
+      let This = this
+      // 兼容手机在拖动的时候不触发music.addEventListener('canplay'
+      if (This.Time === '') {
+        This.Time = setInterval(() => {
+          This.jdtData = music.currentTime / music.duration * 100
+          // console.log(music.currentTime / music.duration * 100)
+          This.$store.state.SongTime = (music.currentTime * 1000).toFixed(0)
+          // console.log(222222222)
+          // console.log(md.currentTime)
+        }, 200)
+      }
     },
     timeStome () {
       clearInterval(this.Time)
