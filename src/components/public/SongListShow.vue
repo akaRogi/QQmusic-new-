@@ -115,6 +115,7 @@ export default {
       let list
       let off = false
       let rank = []
+      this.$store.state.musicShow = true
       if (data.songlist) {
         list = data.songlist
         list.forEach(el => {

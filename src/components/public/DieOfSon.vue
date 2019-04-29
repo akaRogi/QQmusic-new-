@@ -77,7 +77,6 @@ export default {
         console.log(data)
       } else {
         this.$store.commit('musicPuda', data)
-        // console.log(data)
       }
     }
   }

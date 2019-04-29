@@ -92,9 +92,15 @@ export default {
         // console.log(elemShow)
         if (this.lrcShow) {
           this.scroll.scrollToElement(lineEl, 1000)
+        } else {
+          console.log(2222222)
+          this.scroll.scrollToElement(0, 1000)
         }
       } else {
-        // this.$refs.wrapper.scrollTo(0, 0, 1000)// 滚动到顶部
+        let This = this
+        setTimeout(() => {
+          This.scroll.scrollToElement(this.$refs.lyricLine[0], 1000)
+        }, 500)
       }
       // this.playingLyric = txt
       // console.log(Number(to))

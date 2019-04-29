@@ -30,6 +30,7 @@ let store = new Vuex.Store({
     },
     musicShow: false,
     MvId: '',
+    // 播放列表
     songList: [],
     songIndex: 0,
     tis: false,
@@ -126,6 +127,17 @@ let store = new Vuex.Store({
     userCollection (state, data) {
       state.user.Collection.unshift(data)
       this.commit('userSongPudate', state.user)
+    },
+    musicPuda (state, data) {
+      state.songList.splice(state.songIndex, 0, data)
+      state.songIndex++
+      // if (state.songIndex === 0) {
+      //   state.songIndex++
+      // } else {
+      //   state.songIndex--
+      // }
+      state.musicShow = true
+      console.log(data)
     }
   },
   // 类似于计算属性

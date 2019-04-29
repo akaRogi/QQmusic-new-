@@ -18,6 +18,7 @@
       </transition>
     <div class="bottom">
       <div class="jdt">
+        <div class="ms">{{thisS}}</div>
         <div
           class="jdtBox"
           @touchend="ff"
@@ -34,6 +35,7 @@
             @ouseup="ff"
           ></range>
         </div>
+        <div class="leng">{{songLeng}}</div>
       </div>
       <div class="btnBox">
         <div class="btn" @click="songPuda(-1)">
@@ -91,7 +93,9 @@ export default {
       currentLyric: {},
       lrc: false,
       loop: false,
-      typeIcon: 'all'
+      typeIcon: 'all',
+      songLeng: '00:00',
+      thisS: '00:00'
     }
   },
   methods: {
@@ -102,10 +106,10 @@ export default {
         this.loop = false
       }
       this.typeIcon = data
-      console.log(data)
+      // console.log(data)
     },
     down () {
-      console.log(222)
+      // console.log(222)
     },
     lrcShow () {
       this.lrc = true
@@ -124,6 +128,7 @@ export default {
           This.$store.state.SongTime = (music.currentTime * 1000).toFixed(0)
           // console.log(222222222)
           // console.log(md.currentTime)
+          This.TimeFn(music.currentTime, 's')
         }, 200)
       }
     },
@@ -164,12 +169,12 @@ export default {
       } else if (this.song.mid) {
         url = this.song.mid
       }
-      console.log(this.song)
+      // console.log(this.song)
       let This = this
       let RecommendSong = `/qqCMusic/base/fcgi-bin/fcg_music_express_mobile3.fcg?format=json205361747&platform=yqq&cid=205361747&songmid=${url}&filename=C400${url}.m4a&guid=126548448`
       this.axios.get(RecommendSong)
         .then(function (res) {
-          console.log(res.data)
+          // console.log(res.data)
           let id = res.data.data.items[0].filename
           let key = res.data.data.items[0].vkey
           if (key) {
@@ -197,24 +202,25 @@ export default {
       } else if (this.song.id) {
         id = this.song.id
       }
-      console.log(13, this.song)
+      // console.log(13, this.song)
       this.axios.get(`/qqCMusic/lyric/fcgi-bin/fcg_query_lyric.fcg?g_tk=5381&uin=0&format=json&inCharset=utf-8&outCharset=utf-8&notice=0&platform=h5&needNewCode=1&nobase64=1&musicid=${id}&songtype=0&_=1513437581324`)
         .then(function (res) {
-          console.log(res.data)
+          // console.log(res.data)
           let num1 = res.data.indexOf('(')
           let num2 = res.data.indexOf(')')
           let resultData = JSON.parse(res.data.substring(num1 + 1, num2))
-          console.log(resultData.lyric)
+          // console.log(resultData.lyric)
           let lrc = resultData.lyric
           lrc = lrc.replace(/&#(\d+);/g, (str, match) => String.fromCharCode(match))
           console.info(lrc)
           This.currentLyric = new Lyric(lrc, This.handleLyric)
-          console.log(This.currentLyric)
+          // console.log(This.currentLyric)
         })
     },
     songPuda (data) {
       // 1下一首，-1上一首
       if (this.typeIcon === '') {
+        // console.log(this.$store.state.songIndex)
         let num = Math.round(Math.random() * this.songList.length)
         if (this.$store.state.songIndex === Math.round(Math.random() * this.songList.length)) {
           this.$store.state.songIndex = Math.round(Math.random() * this.songList.length + 1)
@@ -224,24 +230,6 @@ export default {
       } else {
         this.$store.commit('songIndexFn', data)
       }
-      // if (this.songList.length !== 1) {
-      //   if (this.songList.length !== this.songThis) {
-      //     if (this.songThis !== 1) {
-      //       this.$store.commit('songIndexFn', num)
-      //     } else if (num === 1) {
-      //       this.$store.commit('songIndexFn', num)
-      //     }
-      //   } else if (num === -1) {
-      //     this.$store.commit('songIndexFn', num)
-      //   }
-      // } else {
-      //   alert('没有可播放的歌曲')
-      // }
-      // if (num === -1) {
-      //   if (this.songThis > 1) {
-      //     this.$store.commit('songIndexFn', num)
-      //   }
-      // }
     },
     songFn () {
       let music = document.getElementById('music')
@@ -253,6 +241,26 @@ export default {
         this.stopOff = false
         this.$store.state.songtj = false
         music.pause()
+      }
+    },
+    TimeFn (s, off) {
+      // 计算分钟
+      // 算法：将秒数除以60，然后下舍入，既得到分钟数
+      var h
+      h = Math.floor(s / 60)
+      // 计算秒
+      // 算法：取得秒%60的余数，既得到秒数
+      s = (s % 60).toFixed(0)
+      // 将变量转换为字符串
+      h += ''
+      s += ''
+      // 如果只有一位数，前面增加一个0
+      h = (h.length === 1) ? '0' + h : h
+      s = (s.length === 1) ? '0' + s : s
+      if (off === 'h') {
+        this.songLeng = h + ':' + s
+      } else {
+        this.thisS = h + ':' + s
       }
     }
   },
@@ -291,6 +299,8 @@ export default {
       This.SongLeng = music.duration
       This.stopOff = true
       This.$store.state.songtj = true
+      This.TimeFn(music.duration, 'h')
+      // This.songLeng = Math.floor(music.duration / 60) + ':' + music.duration % 60
       if (This.Time === '') {
         This.Time = setInterval(() => {
           This.jdtData = music.currentTime / music.duration * 100
@@ -298,6 +308,8 @@ export default {
           This.$store.state.SongTime = (music.currentTime * 1000).toFixed(0)
           // console.log(222222222)
           // console.log(md.currentTime)
+          This.TimeFn(music.currentTime, 's')
+          // console.log(music.currentTime)
         }, 200)
       }
     })
@@ -326,6 +338,9 @@ export default {
         this.$store.state.songIndex = 1
       } else {
         // console.log(1, this.songList[to - 1])
+        if (to === 0) {
+          this.$store.state.songIndex = this.songList.length
+        }
         this.song = this.songList[to - 1]
         // console.log(2, this.song)
         this.songRequest()
@@ -406,9 +421,20 @@ export default {
   }
   .jdt{
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     height: 100px;
+    position: relative;
+  }
+  .ms, .leng{
+    position: absolute;
+    font-size: 28px;
+  }
+  .ms{
+    left: 20px;
+  }
+  .leng{
+    right: 20px;
   }
   .jdtBox{
     display: block;
