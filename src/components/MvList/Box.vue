@@ -106,6 +106,7 @@ export default {
       this.scroll.on('pullingUp', () => {
         console.log(1111)
         this.scroll.finishPullUp()
+        this.scroll.refresh()
       })
 
       // 滑动过程中事件
@@ -122,6 +123,7 @@ export default {
           console.log('已松开')
         } else if (pos.y < (this.scroll.maxScrollY - 80)) {
           this.requestFn(true)
+          this.refresh()
         } else {
         }
       })

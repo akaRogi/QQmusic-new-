@@ -7,15 +7,18 @@
       <router-view v-if="$route.meta.keepAlive" name="user"/>
     </keep-alive>
     <router-view v-if="!$route.meta.keepAlive"/>
+    <!--音乐播放页面按钮-->
     <div class="musicDiv" @click="$store.state.musicShow = true" v-show="music">
       音乐
     </div>
+    <!--音乐播放组件-->
     <div
       class="MusicBox"
       :class="{show : musicShow}"
     >
       <music-box></music-box>
     </div>
+    <!--个人中心-->
     <actionsheet
       v-model="show2"
       show-cancel
@@ -49,6 +52,7 @@
         </div>
       </group>
     </actionsheet>
+    <!--触发成功提示-->
     <toast v-model="tis" :time="1000" @on-hide="$store.state.tis = false">成功</toast>
   </div>
 </template>

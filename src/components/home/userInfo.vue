@@ -126,9 +126,9 @@
             </group>
           </div>
           <div class="btn">
-            <div>
-              <x-button>切换用户</x-button>
-            </div>
+            <!--<div>-->
+              <!--<x-button>切换用户</x-button>-->
+            <!--</div>-->
             <div @click="usetOut">
               <x-button>退出当前账户</x-button>
             </div>
@@ -263,21 +263,21 @@ export default {
   }
   .btn div{
     float: left;
-    width: 50%;
+    width: 100%;
   }
   .btn div:nth-child(1){
     position: relative;
   }
-  .btn div:nth-child(1):after{
-    content: "";
-    display: block;
-    position: absolute;
-    right: 0;
-    top: 0;
-    height: 100%;
-    width: 2px;
-    background: rgba(0, 0, 0, 0.27);
-  }
+  /*.btn div:nth-child(1):after{*/
+    /*content: "";*/
+    /*display: block;*/
+    /*position: absolute;*/
+    /*right: 0;*/
+    /*top: 0;*/
+    /*height: 100%;*/
+    /*width: 2px;*/
+    /*background: rgba(0, 0, 0, 0.27);*/
+  /*}*/
   .btn div:nth-child(1) >>> button:after{
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
