@@ -68,6 +68,7 @@ export default {
               This.requenstIng = true
               This.scroll.refresh()
               This.showPosition('top')
+              This.scroll.refresh()
               // This.showPosition()
               console.log(res.data.data.list)
             })

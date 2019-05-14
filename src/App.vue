@@ -34,7 +34,7 @@
             is-link
             :border-intent="false"
             :arrow-direction="showContent002 ? 'up' : 'down'"
-            @click.native.stop="showContent002 = !showContent002"
+            @click.native.stop="songlistShow"
           ></cell>
           <div class="slide" :class="showContent002?'animate':''">
             <div
@@ -82,6 +82,14 @@ export default {
   methods: {
     hidTis () {
       this.$store.state.tis = false
+    },
+    songlistShow () {
+      let user = this.userFn
+      if (user.songList.length) {
+        this.showContent002 = !this.showContent002
+      } else {
+        alert('你还没有创建的歌单呢')
+      }
     },
     songPush (data) {
       let user = this.userFn

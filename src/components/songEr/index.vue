@@ -1,6 +1,8 @@
 <template>
   <div class="Soner">
-    <Title title="歌手"></Title>
+    <x-header
+      title="歌单分类"
+    ></x-header>
     <div class="RightBtn">
       <Tag :data="tags" @puadId="puadId"></Tag>
     </div>
@@ -16,11 +18,13 @@
 import Tag from './tab'
 import Main from './Main'
 import BScroll from 'better-scroll'
+import {XHeader} from 'vux'
 export default {
   name: 'index',
   components: {
     Tag,
-    Main
+    Main,
+    XHeader
   },
   data () {
     return {
@@ -77,6 +81,55 @@ export default {
 </script>
 
 <style scoped>
+  .Soner{
+    top: 0;
+    position: fixed;
+    z-index: 9999999999;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+  }
+  .Soner >>> .vux-tab{
+    background: #32c27c;
+    padding-bottom: 20px;
+    color: #fff;
+  }
+  .Soner >>> .vux-tab-item.vux-tab-selected{
+    font-size: 30px;
+    font-weight: 700;
+  }
+  .Soner >>> .vux-tab-item {
+    color: #fff;
+    font-size: 24px;
+  }
+  .Soner >>> .vux-tab-wrap{
+    padding-top: 70px;
+  }
+  .Soner >>> .vux-tab-container{
+    padding-bottom: 20px;
+  }
+  .Soner >>> .vux-tab-ink-bar{
+    bottom: 10px;
+  }
+  .Soner >>> .vux-header-left{
+    top: calc(50% - 10px);
+  }
+  .Soner >>> .vux-header {
+    background: #32c27c;
+    padding: 25px 0;
+    color: #fff;
+  }
+  .Soner >>> .vux-header-title span{
+    font-weight: 700;
+    font-size: 30px;
+  }
+  .Soner >>> .vux-header .vux-header-back{
+    color: #fff;
+    font-size: 24px;
+  }
+  .Soner >>> .vux-header .vux-header-left .left-arrow:before{
+    border-color: #fff;
+  }
   .RightBtn{
     position: fixed;
     top: 90px;

@@ -36,6 +36,8 @@ export default {
         }
       )
       this.$store.commit('userSongPudate', user)
+      alert('创建成功')
+      this.$router.back()
     }
   },
   components: {

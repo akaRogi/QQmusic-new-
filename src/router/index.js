@@ -119,6 +119,11 @@ const router = new Router({
       path: '/SongerShow/:id?',
       name: 'SongerShow',
       component: SongerShow
+    },
+    {
+      path: '/newDie',
+      name: 'demo',
+      component: demo
     }
   ]
 })

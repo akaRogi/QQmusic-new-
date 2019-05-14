@@ -43,9 +43,10 @@ export default {
     position: absolute;
     padding: 30px;
     top: 120px;
+    width: calc(100% - 60px);
     height: calc(100% - 180px);
     background: #fff;
-    z-index: 899999;
+    z-index: 9999999999999999;
   }
   .search_hot h3{
     margin-bottom: 20px;

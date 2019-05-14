@@ -40,6 +40,7 @@ export default {
           .then(function (res) {
             This.off = false
             This.list = res.data.new_song.data.songlist
+            This.scroll.refresh()
             console.log(res.data.new_song.data.songlist)
           })
           .catch(function (error) {

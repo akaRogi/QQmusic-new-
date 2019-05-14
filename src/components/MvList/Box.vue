@@ -3,7 +3,7 @@
     <div class="bscroll" :style="height" ref="wrapper">
       <div>
         <mv-list @IdShow="MvShow" :data="list" p="1000"></mv-list>
-        <div>松手刷新</div>
+        <div style="text-align: center;padding-bottom: 20px">松手刷新</div>
       </div>
       <toast
         v-model="showPositionValue"
@@ -67,6 +67,7 @@ export default {
               This.showPosition('top')
               This.scroll.refresh()
               This.msg = '载入成功'
+              This.scroll.refresh()
             })
             .catch(function (error) {
               alert('载入失败')
@@ -104,9 +105,7 @@ export default {
         }
       })
       this.scroll.on('pullingUp', () => {
-        console.log(1111)
         this.scroll.finishPullUp()
-        this.scroll.refresh()
       })
 
       // 滑动过程中事件
@@ -123,7 +122,6 @@ export default {
           console.log('已松开')
         } else if (pos.y < (this.scroll.maxScrollY - 80)) {
           this.requestFn(true)
-          this.refresh()
         } else {
         }
       })
