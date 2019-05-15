@@ -1,30 +1,64 @@
 <template>
   <div class="searchList">
-    <ul class="list_search">
-      <li
+    <swipeout class="vux-1px-tb list_search">
+      <swipeout-item
+        transition-mode="follow"
         v-for="(item, index) in data"
         :key="index"
-        @click="pushSong(item)"
       >
-        <h6>{{item.name || item.title}}</h6>
-
-        <p><span
-          v-for="(SongName, j) in item.singer"
-          :key="j"
-        >
+        <div class="right-menu" slot="right-menu">
+          <swipeout-button
+            type="primary"
+            @click.native="songInfo(item)"
+          >收藏</swipeout-button>
+          <!--<swipeout-button type="primary">111</swipeout-button>-->
+          <!--<swipeout-button type="warn">2222</swipeout-button>-->
+        </div>
+        <div @click="pushSong(item)" slot="content" class="demo-content vux-1px-t">
+          <h6>{{item.name || item.title}}</h6>
+          <p><span
+            v-for="(SongName, j) in item.singer"
+            :key="j"
+          >
         {{SongName.name}}
         </span></p>
-        <div class="icon" @click="songInfo(item)">
-          <x-icon class="cell-x-icon" type="ios-heart-outline" size="30"></x-icon>
+          <!--<div class="icon" @click="songInfo(item)">-->
+            <!--<x-icon class="cell-x-icon" type="ios-heart-outline" size="30"></x-icon>-->
+          <!--</div>-->
         </div>
-      </li>
-    </ul>
+      </swipeout-item>
+    </swipeout>
+    <!--<ul class="list_search">-->
+      <!--<li-->
+        <!--v-for="(item, index) in data"-->
+        <!--:key="index"-->
+        <!--@click="pushSong(item)"-->
+      <!--&gt;-->
+        <!--<h6>{{item.name || item.title}}</h6>-->
+
+        <!--<p><span-->
+          <!--v-for="(SongName, j) in item.singer"-->
+          <!--:key="j"-->
+        <!--&gt;-->
+        <!--{{SongName.name}}-->
+        <!--</span></p>-->
+        <!--<div class="icon" @click="songInfo(item)">-->
+          <!--<x-icon class="cell-x-icon" type="ios-heart-outline" size="30"></x-icon>-->
+        <!--</div>-->
+      <!--</li>-->
+    <!--</ul>-->
   </div>
 </template>
 
 <script>
+import { Swipeout, SwipeoutItem, SwipeoutButton } from 'vux'
 export default {
   name: 'searchList',
+  components: {
+    Swipeout,
+    SwipeoutItem,
+    SwipeoutButton
+  },
   props: ['data'],
   methods: {
     pushSong (data) {
@@ -44,7 +78,7 @@ export default {
   .searchList{
     padding: 15px;
   }
-  .list_search li {
+  .demo-content {
     position: relative;
     margin-top: 26px;
     height: 100px;
@@ -54,7 +88,7 @@ export default {
     background-position: 10px 20px;
     background-image: url("../../assets/img/search_sprite.png");
   }
-  .list_search li h6 {
+  .demo-content h6 {
     padding-top: 12px;
     margin-bottom: 5px;
     line-height: 36px;
@@ -62,10 +96,10 @@ export default {
     font-weight: normal;
     color: #9a999e;
   }
-  .list_search li p {
+  .demo-content p {
     color: #808080;
   }
-  .list_search li span:nth-child(n+1) {
+  .demo-content span:nth-child(n+1) {
     margin-right: 20px;
   }
   .icon{

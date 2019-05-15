@@ -69,18 +69,28 @@
       :loop="loop"
       hidden="true"
     ></audio>
+    <group>
+      <confirm
+        v-model="vipShow"
+        title="这首歌是Vip哦，是否为你跳过这个歌曲呢"
+        @on-confirm="thmusic"
+      >
+      </confirm>
+    </group>
   </div>
 </template>
 
 <script>
 import Lyric from 'lyric-parser'
-import { Range } from 'vux'
+import { Range, Group, Confirm } from 'vux'
 import lrc from './lrc'
 export default {
   name: 'index',
   components: {
     Range,
-    lrc
+    lrc,
+    Group,
+    Confirm
   },
   data () {
     return {
@@ -95,7 +105,8 @@ export default {
       loop: false,
       typeIcon: 'all',
       songLeng: '00:00',
-      thisS: '00:00'
+      thisS: '00:00',
+      vipShow: false
     }
   },
   methods: {
@@ -157,6 +168,10 @@ export default {
       }
       return T + img + H
     },
+    thmusic () {
+      alert(2222)
+      this.$store.commit('songIndexFn', 1)
+    },
     songRequest (data) {
       let url
       // let T = 'http://ws.stream.qqmusic.qq.com/'
@@ -174,7 +189,7 @@ export default {
       let RecommendSong = `/qqCMusic/base/fcgi-bin/fcg_music_express_mobile3.fcg?format=json205361747&platform=yqq&cid=205361747&songmid=${url}&filename=C400${url}.m4a&guid=126548448`
       this.axios.get(RecommendSong)
         .then(function (res) {
-          // console.log(res.data)
+          console.log(10, res.data)
           let id = res.data.data.items[0].filename
           let key = res.data.data.items[0].vkey
           if (key) {
@@ -182,12 +197,14 @@ export default {
             This.url = T + id + H + key
           } else {
             if (!This.loop) {
-              This.$store.commit('songIndexFn', 1)
+              This.vipShow = true
             } else if (This.typeIcon === '') {
+              alert(2222)
               let num = Math.round(Math.random() * This.songList.length)
               if (This.$store.state.songIndex === Math.round(Math.random() * This.songList.length)) {
                 This.$store.state.songIndex = Math.round(Math.random() * This.songList.length + 1)
               } else {
+                alert(333)
                 This.$store.state.songIndex = num
               }
             }
