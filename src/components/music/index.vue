@@ -195,16 +195,15 @@ export default {
           if (key) {
             // 原来可用，但是学校屏蔽了请求
             This.url = T + id + H + key
+            This.url = 'http://localhost/2240247614.mp3'
           } else {
             if (!This.loop) {
               This.vipShow = true
             } else if (This.typeIcon === '') {
-              alert(2222)
               let num = Math.round(Math.random() * This.songList.length)
               if (This.$store.state.songIndex === Math.round(Math.random() * This.songList.length)) {
                 This.$store.state.songIndex = Math.round(Math.random() * This.songList.length + 1)
               } else {
-                alert(333)
                 This.$store.state.songIndex = num
               }
             }

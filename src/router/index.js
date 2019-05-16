@@ -18,6 +18,7 @@ import SongListPush from '@/components/user/SongListPush'
 import LocalhostSon from '@/components/user/LocalhostSon'
 import Songer from '@/components/songEr'
 import SongerShow from '@/components/songEr/SongErShow'
+import BottomMusic from '@/components/music/BottomMusic'
 
 Vue.use(Router)
 
@@ -28,7 +29,8 @@ const router = new Router({
       name: 'home',
       components: {
         default: home,
-        user: userInfo
+        user: userInfo,
+        BottomMusic: BottomMusic
       },
       meta: {
         keepAlive: true

@@ -100,7 +100,7 @@ export default {
         let This = this
         setTimeout(() => {
           This.scroll.scrollToElement(this.$refs.lyricLine[0], 1000)
-        }, 500)
+        }, 100)
       }
       // this.playingLyric = txt
       // console.log(Number(to))

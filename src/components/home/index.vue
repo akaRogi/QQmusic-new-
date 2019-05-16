@@ -56,8 +56,8 @@ export default {
     hei () {
       let Box = document.getElementsByClassName('BScroll')[0].offsetTop
       let scrollTop = document.documentElement.clientHeight
-      this.height = 'height:' + (scrollTop - Box) + 'px'
-      // console.log(this.height)
+      this.height = 'height:' + (scrollTop - Box - 60) + 'px'
+      // console.log(111, )
     },
     // 歌单展示
     SongShow (data) {

@@ -6,11 +6,14 @@
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive" name="user"/>
     </keep-alive>
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive" name="BottomMusic"/>
+    </keep-alive>
     <router-view v-if="!$route.meta.keepAlive"/>
     <!--音乐播放页面按钮-->
-    <div class="musicDiv" @click="$store.state.musicShow = true" v-show="music">
-      音乐
-    </div>
+    <!--<div class="musicDiv" @click="$store.state.musicShow = true" v-show="music">-->
+      <!--音乐-->
+    <!--</div>-->
     <!--音乐播放组件-->
     <div
       class="MusicBox"
@@ -54,12 +57,14 @@
     </actionsheet>
     <!--触发成功提示-->
     <toast v-model="tis" :time="1000" @on-hide="$store.state.tis = false">成功</toast>
+    <!--<bottom-music></bottom-music>-->
   </div>
 </template>
 
 <script>
 import { Toast, Actionsheet, Group, Cell } from 'vux'
 import MusicBox from './components/music'
+import BottomMusic from './components/music/BottomMusic'
 export default {
   name: 'App',
   components: {
@@ -67,7 +72,8 @@ export default {
     Toast,
     Actionsheet,
     Group,
-    Cell
+    Cell,
+    BottomMusic
   },
   data () {
     return {

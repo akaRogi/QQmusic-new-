@@ -48,7 +48,7 @@ export default {
       id: 52,
       //  better-scroll高度
       height: '',
-      Xz: 100,
+      Xz: 0,
       XZshow: 150
     }
   },
