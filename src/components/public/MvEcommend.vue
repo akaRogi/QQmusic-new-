@@ -7,6 +7,7 @@
         :key="index"
         :to="'/Mv/' + item.vid"
         class="One"
+        replace
       >
         <div class="imgBox">
           <img :src="item.picurl || item.cover_pic" alt="">

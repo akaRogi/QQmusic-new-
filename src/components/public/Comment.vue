@@ -64,7 +64,7 @@ export default {
     return {
       heipx: 0,
       pushTis: true,
-      tis: '32'
+      tis: ''
     }
   },
   methods: {

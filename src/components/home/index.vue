@@ -100,10 +100,12 @@ export default {
     })
   },
   created () {
+    this.$store.commit('updateLoading', true)
     let This = this
     let url = '/qqUMusic' + this.$store.state.url.home
     this.axios.get(url)
       .then(function (res) {
+        This.$store.commit('updateLoading', false)
         This.banner = res.data.focus.data.content
         This.songlist = res.data.recomPlaylist.data.v_hot
         This.newSong = res.data.new_song.data.songlist

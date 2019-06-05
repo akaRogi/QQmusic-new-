@@ -85,6 +85,7 @@ export default {
     }
   },
   created () {
+    this.$store.commit('updateLoading', true)
     let This = this
     let url = '/qqUMusic/cgi-bin/musicu.fcg?-=mvlib9787910555420507&g_tk=1981813800&loginUin=1737481208&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&data=%7B"comm"%3A%7B"ct"%3A24%7D%2C"mv_tag"%3A%7B"module"%3A"MvService.MvInfoProServer"%2C"method"%3A"GetAllocTag"%2C"param"%3A%7B%7D%7D%2C"mv_list"%3A%7B"module"%3A"MvService.MvInfoProServer"%2C"method"%3A"GetAllocMvInfo"%2C"param"%3A%7B"start"%3A0%2C"size"%3A20%2C"version_id"%3A7%2C"area_id"%3A15%2C"order"%3A1%7D%7D%7D'
     this.axios.get(url)
@@ -97,6 +98,7 @@ export default {
           }
         })
         console.log(This.list)
+        This.$store.commit('updateLoading', false)
         // version
         // This.list = res.data.data.categories[4].items
         // This.demo2 = res.data.data.categories[4].items[0].categoryName

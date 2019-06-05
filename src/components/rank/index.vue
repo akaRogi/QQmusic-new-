@@ -36,12 +36,14 @@ export default {
     }
   },
   created () {
+    this.$store.commit('updateLoading', true)
     let This = this
     let url = '/qqCMusic' + this.$store.state.url.rankUrl
     this.axios.get(url)
       .then(function (response) {
         This.hei()
         This.data = response.data.data.topList
+        This.$store.commit('updateLoading', false)
         console.log(response.data.data.topList)
       })
       .catch(function (error) {

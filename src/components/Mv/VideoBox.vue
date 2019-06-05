@@ -58,6 +58,7 @@ export default {
           }
         }
         // console.log(res.data)
+        This.$store.commit('updateLoading', false)
       })
   }
 }

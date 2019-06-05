@@ -17,6 +17,7 @@ export default {
     }
   },
   created () {
+    this.$store.commit('updateLoading', true)
     let This = this
     let id = this.$route.params.id
     console.log(id)
@@ -24,6 +25,7 @@ export default {
     this.axios.get(RecommendSong)
       .then(function (res) {
         This.data = res.data
+        This.$store.commit('updateLoading', false)
         console.log(res.data)
       })
   }

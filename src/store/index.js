@@ -39,7 +39,9 @@ let store = new Vuex.Store({
     // 收藏歌曲展示储存的数据
     song: {},
     songtj: true,
-    SongTime: ''
+    SongTime: '',
+    // 载入动画开关
+    loadingShow: false
   },
   mutations: {
     // 定义的方法，参数一: 行参，填入任何字母都可以。  参数二: 传参。
@@ -138,6 +140,9 @@ let store = new Vuex.Store({
       // }
       state.musicShow = true
       console.log(data)
+    },
+    updateLoading (stare, data) {
+      stare.loadingShow = data
     }
   },
   // 类似于计算属性

@@ -195,7 +195,7 @@ export default {
           if (key) {
             // 原来可用，但是学校屏蔽了请求
             This.url = T + id + H + key
-            This.url = 'http://localhost/2240247614.mp3'
+            // This.url = 'http://localhost/2240247614.mp3'
           } else {
             if (!This.loop) {
               This.vipShow = true

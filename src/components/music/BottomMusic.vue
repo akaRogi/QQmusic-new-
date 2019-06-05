@@ -13,7 +13,7 @@
           <x-icon type="ios-ionic-outline" size="30" v-show="stopOff"></x-icon>
           <x-icon type="ios-circle-filled" size="30" v-show="!stopOff"></x-icon>
         </div>
-        <x-icon type="ios-arrow-right" size="30"></x-icon>
+        <x-icon type="ios-arrow-right" size="30" @click.stop="songLata"></x-icon>
       </div>
     </div>
   </div>
@@ -32,6 +32,9 @@ export default {
     }
   },
   methods: {
+    songLata () {
+      this.$store.commit('songIndexFn', 1)
+    },
     songFn () {
       let music = document.getElementById('music')
       let volume = 1

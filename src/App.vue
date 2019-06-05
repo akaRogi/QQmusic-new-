@@ -58,6 +58,8 @@
     <!--触发成功提示-->
     <toast v-model="tis" :time="1000" @on-hide="$store.state.tis = false">成功</toast>
     <!--<bottom-music></bottom-music>-->
+    <!-- 载入动画 -->
+    <loading-box v-show='loadingShow'></loading-box>
   </div>
 </template>
 
@@ -65,6 +67,7 @@
 import { Toast, Actionsheet, Group, Cell } from 'vux'
 import MusicBox from './components/music'
 import BottomMusic from './components/music/BottomMusic'
+import LoadingBox from './components/public/loading'
 export default {
   name: 'App',
   components: {
@@ -73,7 +76,8 @@ export default {
     Actionsheet,
     Group,
     Cell,
-    BottomMusic
+    BottomMusic,
+    LoadingBox
   },
   data () {
     return {
@@ -133,6 +137,9 @@ export default {
     },
     musicShowFn () {
       return this.$store.state.musicShow
+    },
+    loadingShow () {
+      return this.$store.state.loadingShow
     }
   },
   created () {

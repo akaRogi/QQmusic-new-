@@ -48,6 +48,7 @@ export default {
         .then(function (response) {
           This.data = response.data.singerList.data
           This.tags = response.data.singerList.data.tags.index
+          This.$store.commit('updateLoading', false)
           This.hei()
         })
         .catch(function (error) {
@@ -60,6 +61,7 @@ export default {
     }
   },
   created () {
+    this.$store.commit('updateLoading', true)
     this.request()
   },
   mounted () {
